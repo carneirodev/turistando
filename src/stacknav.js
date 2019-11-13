@@ -26,6 +26,17 @@ const stackNav = createStackNavigator({
 				</View>
 			</TouchableOpacity>
 			),
+			headerRight:(<TouchableOpacity onPress={() => navigation.openDrawer()}>
+			<View style={{
+				paddingRight: 15
+			}}>
+				<IOSIcon
+					name="ios-contact"
+					size={30}
+				/>
+			</View>
+		</TouchableOpacity>
+		)
 		})
 	},
 });

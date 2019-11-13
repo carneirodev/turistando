@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
-  Keyboard,
+  Keyboard,ImageBackground,
 } from 'react-native';
 import {
   Image,
@@ -22,6 +22,7 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+import IOSIcon from 'react-native-vector-icons/Ionicons';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 // {"Id":1,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
@@ -137,9 +138,9 @@ class MainScreen extends Component {
     return (
       <View
         style={{
-          height: 1,
+          height: 20,
           width: '100%',
-          backgroundColor: '#CED0CE',
+          
         }}
       />
     );
@@ -161,18 +162,7 @@ class MainScreen extends Component {
     });
   };
 
-  renderHeader = () => {
-    return (
-      <SearchBar
-        placeholder="Pesquise uma cidade"
-        lightTheme
-        round
-        onChangeText={text => this.searchFilterFunction(text)}
-        autoCorrect={false}
-        value={this.state.value}
-      />
-    );
-  };
+
 
   submit(item) {
     //console.log(global.cont)
@@ -189,15 +179,29 @@ class MainScreen extends Component {
         </View>
       );
     }
-    //console.log(global.aux)
+    
     return (
-      //		{"Cidade":"Poços de caldas","Titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
-      <View style={{flex: 1}}>
-        <View style={{flex: 10}}>
-          <FlatList
+      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
+       <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
+       <View style={styles.searchSection}><TextInput
+        placeholder="Pesquise uma cidade"
+    
+       
+        onChangeText={text => this.searchFilterFunction(text)}
+        autoCorrect={false}
+
+        value={this.state.value}
+      /><IOSIcon
+      name="ios-search"
+      size={30}
+     
+    /></View>
+        <View style={{flex: 10,justifyContent:"center",alignItems:"center"}} >
+          <FlatList 
             data={this.state.data}
             renderItem={({item}) => (
-              <TouchableHighlight onPress={() => this.submit(item)}>
+              <TouchableHighlight style={{paddingTop:5, borderRadius:30, justifyContent:"center",alignItems:"center", width: (Dimensions.get('window').width * 9) / 10,
+              height: (Dimensions.get('window').height * 2) / 10,backgroundColor:"white"}} onPress={() => this.submit(item)}>
                 <View style={styles.containerLateral}>
                   <View
                     style={{
@@ -207,12 +211,13 @@ class MainScreen extends Component {
                     }}>
                     <Image
                       source={{uri: item.foto}}
-                      style={{width: 80, height: 80}}
+                      style={{width: (Dimensions.get('window').width * 2.5) / 10,
+                      height: (Dimensions.get('window').height * 1.5) / 10,}}
                     />
                   </View>
 
-                  <View style={{flex: 3, marginRight: 10}}>
-                    <View style={styles.containerTexto}>
+                  <View style={{flex: 3, marginRight: 10,paddingTop:24}}>
+                    <View style={styles.containerTextoTitulo}>
                       <Text style={styles.titulo}>{item.titulo}</Text>
                     </View>
                     <View style={styles.containerTexto}>
@@ -232,11 +237,12 @@ class MainScreen extends Component {
               </TouchableHighlight>
             )}
             ItemSeparatorComponent={this.renderSeparator}
-            ListHeaderComponent={this.renderHeader}
+            
           />
         </View>
+        
       </View>
-    );
+      </ImageBackground>);
   }
 }
 
@@ -625,7 +631,7 @@ class CriarRotaScreen extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-		  <View
+        <View
           style={{
             flex: 2,
             justifyContent: 'center',
@@ -634,71 +640,71 @@ class CriarRotaScreen extends Component {
           }}>
           <Text style={styles.titulo2}>Adicionando rota</Text>
         </View>
-		<View style={{
+        <View
+          style={{
             flex: 14,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-        <ScrollView>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Data"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
+          <ScrollView>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Data"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Hora"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Quantidade de horas"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Quantidade de pessoas envolvidas (turistas)"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Personalidade da rota"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Descrição da rota"
+                maxLength={20}
+                onBlur={Keyboard.dismiss}
+              />
+            </View>
+          </ScrollView>
+          <View
+            style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={() => this.props.navigation.goBack()}>
+              <Text style={styles.buttonText}>Salvar dados</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Hora"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            
-            <TextInput
-              style={styles.textInput}
-              placeholder="Quantidade de horas"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
-          </View>
-		  <View style={styles.inputContainer}>
-            
-            <TextInput
-              style={styles.textInput}
-              placeholder="Quantidade de pessoas envolvidas (turistas)"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
-          </View>
-		  <View style={styles.inputContainer}>
-            
-            <TextInput
-              style={styles.textInput}
-              placeholder="Personalidade da rota"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
-          </View>
-		  <View style={styles.inputContainer}>
-		  <TextInput
-              style={styles.textInput}
-              placeholder="Descrição da rota"
-              maxLength={20}
-              onBlur={Keyboard.dismiss}
-            />
-          </View>
-		  
-        </ScrollView>
-        <View
-          style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.goBack()}>
-            <Text style={styles.buttonText}>Salvar dados</Text>
-          </TouchableOpacity>
-        </View></View>
+        </View>
       </View>
     );
   }
@@ -709,14 +715,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  },searchSection: {
+    flex: 1.3,margin:20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',backgroundColor:"white",
+    alignItems: 'center',borderRadius:40,paddingLeft:10
+},
   containerLateral: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row',paddingLeft:20
   },
   titulo: {
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 25,
     color: '#75b8c8',
   },
   titulo2: {
@@ -725,7 +736,7 @@ const styles = StyleSheet.create({
     color: '#75b8c8',
   },
   texto: {
-    fontSize: 20,
+    fontSize: 16,
   },
   containerLista: {
     flex: 1,
@@ -733,9 +744,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerTexto: {
-    flex: 1,
+    flex: 0.2,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+  },containerTextoTitulo:{
+    flex: 0.15,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',paddingBottom:15
   },
   button: {
     backgroundColor: '#67AAF9',
@@ -752,7 +767,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   inputContainer: {
-    paddingTop: 15,justifyContent:'center',alignItems:'center'
+    paddingTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textInput: {
     borderColor: '#CCCCCC',
@@ -760,11 +777,12 @@ const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderLeftWidth: 2,
     borderTopWidth: 2,
-	width:300,
+    width: 300,
     height: 50,
     fontSize: 25,
     paddingLeft: 20,
-    paddingRight: 20,borderRadius: 10,
+    paddingRight: 20,
+    borderRadius: 10,
   },
 });
 

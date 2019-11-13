@@ -6,7 +6,7 @@ import { ScrollView, Text, View, Dimensions, StyleSheet } from 'react-native';
 import { Button, Icon } from "react-native-elements"
 import 'react-native-gesture-handler';
 //import Icon from 'react-native-vector-icons/FontAwesome';
-
+import IOSIcon from 'react-native-vector-icons/Ionicons';
 class SideMenu extends Component {
 	navigateToScreen = (route) => () => {
 		const navigateAction = NavigationActions.navigate({
