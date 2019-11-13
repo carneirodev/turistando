@@ -9,7 +9,6 @@ import {
 import { createStackNavigator } from 'react-navigation-stack';
 import IOSIcon from 'react-native-vector-icons/Ionicons';
 import MainScreen from './screens/MainScreen';
-import DetailScreen from './screens/DetailScreen';
 import 'react-native-gesture-handler';
 const stackNav = createStackNavigator({
 	Main: {
@@ -29,12 +28,6 @@ const stackNav = createStackNavigator({
 			),
 		})
 	},
-	Detail: {
-		screen: DetailScreen,
-		navigationOptions: ({ navigation }) => ({
-			title: "Detail",
-		})
-	}
 });
 
 export default stackNav;

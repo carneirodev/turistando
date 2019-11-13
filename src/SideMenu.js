@@ -11,6 +11,7 @@ class SideMenu extends Component {
 	navigateToScreen = (route) => () => {
 		const navigateAction = NavigationActions.navigate({
 			routeName: route
+			
 		});
 		this.props.navigation.dispatch(navigateAction);
 	}
@@ -31,14 +32,14 @@ class SideMenu extends Component {
 				/>
 				<ScrollView>
 					<View>
-						<Text style={styles.sectionHeadingStyle} 	onPress={() => this.props.navigation.closeDrawer()}>
-							Minhas rotas
+						<Text style={styles.sectionHeadingStyle} 	onPress={this.navigateToScreen('Home')}>
+							Rotas disponiveis
             </Text>
 					</View>
 
 
 					<View>
-						<Text style={styles.sectionHeadingStyle}	onPress={() => this.props.navigation.closeDrawer()}>
+						<Text style={styles.sectionHeadingStyle}	onPress={this.navigateToScreen('Historico')}>
 							Histórico
             </Text>
 					</View>
@@ -53,8 +54,8 @@ class SideMenu extends Component {
 
 
 					<View>
-						<Text style={styles.sectionHeadingStyle} 	onPress={() => this.props.navigation.closeDrawer()}>
-							Minhas rotas
+						<Text style={styles.sectionHeadingStyle} 	onPress={this.navigateToScreen('Lider')}>
+							Lider de rota
             </Text>
 					</View>
 
@@ -63,7 +64,9 @@ class SideMenu extends Component {
 
 				</ScrollView>
 				<View style={styles.footerContainer}>
-					<Text>Sobre</Text>
+					<Text style={{fontFamily: 'arial',
+    color: 'white',
+    fontSize: 20,}}>Sobre</Text>
 				</View>
 			</View>
 		);

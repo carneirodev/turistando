@@ -18,6 +18,6 @@ export default {
 	},
 	footerContainer: {
 		padding: 20,
-		backgroundColor: 'lightgrey'
+		backgroundColor: '#67AAF9'
 	},
 }
