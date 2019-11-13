@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.turistando">
+  package="com.turistando2">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
