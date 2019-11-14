@@ -53,6 +53,7 @@ class MainScreen extends Component {
   }
 
   makeRemoteRequest = () => {
+  
     const url = [
       {
         Id: 1,
@@ -191,11 +192,11 @@ class MainScreen extends Component {
         autoCorrect={false}
 
         value={this.state.value}
-      /><IOSIcon
+      /><View style={{justifyContent:"flex-end",alignItems:"flex-end",paddingLeft:(Dimensions.get('window').width * 3) / 10}}><IOSIcon
       name="ios-search"
       size={30}
-     
-    /></View>
+     style={{alignItems:"flex-end"}}
+    /></View></View>
         <View style={{flex: 10,justifyContent:"center",alignItems:"center"}} >
           <FlatList 
             data={this.state.data}
@@ -484,7 +485,8 @@ class HistoricoScreen extends Component {
     //console.log(global.aux)
     return (
       //		{"Cidade":"Poços de caldas","Titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
-      <View style={{flex: 1}}>
+      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
+      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
         <View
           style={{
             flex: 2,
@@ -537,6 +539,7 @@ class HistoricoScreen extends Component {
           />
         </View>
       </View>
+      </ImageBackground>
     );
   }
 }
@@ -574,7 +577,9 @@ class LiderScreen extends Component {
     }
     //console.log(global.aux)
     return (
-      <View style={{flex: 1}}>
+      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
+     
+      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
         <View
           style={{
             flex: 2,
@@ -603,7 +608,7 @@ class LiderScreen extends Component {
           </TouchableOpacity>
         </View>
       </View>
-    );
+    </ImageBackground>);
   }
 }
 
@@ -630,7 +635,9 @@ class CriarRotaScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
+     
+      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
         <View
           style={{
             flex: 2,
@@ -706,7 +713,7 @@ class CriarRotaScreen extends Component {
           </View>
         </View>
       </View>
-    );
+      </ImageBackground>);
   }
 }
 
