@@ -10,6 +10,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import IOSIcon from 'react-native-vector-icons/Ionicons';
 import MainScreen from './screens/MainScreen';
 import 'react-native-gesture-handler';
+
+
 const stackNav = createStackNavigator({
 	Main: {
 		screen: MainScreen,

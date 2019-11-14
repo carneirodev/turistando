@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styles from './SideMenu.style';
 import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, Dimensions, StyleSheet } from 'react-native';
+import { ScrollView, Text, View, AsyncStorage, Dimensions, StyleSheet } from 'react-native';
 import { Button, Icon } from "react-native-elements"
 import 'react-native-gesture-handler';
 //import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,10 +11,16 @@ class SideMenu extends Component {
 	navigateToScreen = (route) => () => {
 		const navigateAction = NavigationActions.navigate({
 			routeName: route
-			
+
 		});
 		this.props.navigation.dispatch(navigateAction);
 	}
+
+	_signOutAsync = async () => {
+		await AsyncStorage.clear();
+		this.props.navigation.navigate('Auth');
+	};
+
 
 	render() {
 		return (
@@ -32,14 +38,14 @@ class SideMenu extends Component {
 				/>
 				<ScrollView>
 					<View>
-						<Text style={styles.sectionHeadingStyle} 	onPress={this.navigateToScreen('Home')}>
+						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Home')}>
 							Rotas disponiveis
             </Text>
 					</View>
 
 
 					<View>
-						<Text style={styles.sectionHeadingStyle}	onPress={this.navigateToScreen('Historico')}>
+						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Historico')}>
 							Histórico
             </Text>
 					</View>
@@ -47,26 +53,27 @@ class SideMenu extends Component {
 
 
 					<View>
-						<Text style={styles.sectionHeadingStyle} 	onPress={() => this.props.navigation.closeDrawer()}>
+						<Text style={styles.sectionHeadingStyle} onPress={() => this.props.navigation.closeDrawer()}>
 							Ajuda
             </Text>
 					</View>
 
 
 					<View>
-						<Text style={styles.sectionHeadingStyle} 	onPress={this.navigateToScreen('Lider')}>
+						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Lider')}>
 							Lider de rota
             </Text>
 					</View>
-
-
-
-
 				</ScrollView>
 				<View style={styles.footerContainer}>
-					<Text style={{fontFamily: 'arial',
-    color: 'white',
-    fontSize: 20,}}>Sobre</Text>
+					<Button title="Sair" onPress={this._signOutAsync}></Button>
+				</View>
+				<View style={styles.footerContainer}>
+					<Text style={{
+						fontFamily: 'arial',
+						color: 'white',
+						fontSize: 20,
+					}}>Sobre</Text>
 				</View>
 			</View>
 		);
