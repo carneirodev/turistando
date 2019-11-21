@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
-  Keyboard,ImageBackground,
+  Keyboard, ImageBackground,
 } from 'react-native';
 import {
   Image,
@@ -23,8 +23,12 @@ import {
   FormValidationMessage,
 } from 'react-native-elements';
 import IOSIcon from 'react-native-vector-icons/Ionicons';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import CriarRotaScreen from './CriarRotaScreen';
+import EditarRotaScreen from './EditarRotaScreen';
+import EditarDados from './EditarDados';
 // {"Id":1,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
 // 			{"Id":2,"cidade":"Poços de caldas","titulo":"#Partiu Prias","Saída":"11/11 - 10:00","Duração":"5 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
 // 			{"Id":3,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 16:00","Duração":"3 Horas","Vaga":"6 Vagas","description":"Uma breve descrição"}
@@ -53,7 +57,7 @@ class MainScreen extends Component {
   }
 
   makeRemoteRequest = () => {
-  
+
     const url = [
       {
         Id: 1,
@@ -126,7 +130,7 @@ class MainScreen extends Component {
           'https://upload.wikimedia.org/wikipedia/commons/6/62/Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg',
       },
     ]; //URL da API  do JSON com as informações
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     this.setState({
       data: url,
@@ -141,7 +145,7 @@ class MainScreen extends Component {
         style={{
           height: 20,
           width: '100%',
-          
+
         }}
       />
     );
@@ -169,80 +173,84 @@ class MainScreen extends Component {
     //console.log(global.cont)
     //const { navigation } = this.props;
     //const itemId = navigation.getParam('dados');
-    this.props.navigation.navigate('Modal', {dados: item}); //Próxima rota
+    this.props.navigation.navigate('Modal', { dados: item }); //Próxima rota
   }
 
   render() {
     if (this.state.loading) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
         </View>
       );
     }
-    
+
     return (
-      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
-       <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
-       <View style={styles.searchSection}><TextInput
-        placeholder="Pesquise uma cidade"
-    
-       
-        onChangeText={text => this.searchFilterFunction(text)}
-        autoCorrect={false}
+      <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
+        <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
+          <View style={styles.searchSection}><TextInput
+            placeholder="Pesquise uma cidade"
 
-        value={this.state.value}
-      /><View style={{justifyContent:"flex-end",alignItems:"flex-end",paddingLeft:(Dimensions.get('window').width * 3) / 10}}><IOSIcon
-      name="ios-search"
-      size={30}
-     style={{alignItems:"flex-end"}}
-    /></View></View>
-        <View style={{flex: 10,justifyContent:"center",alignItems:"center"}} >
-          <FlatList 
-            data={this.state.data}
-            renderItem={({item}) => (
-              <TouchableHighlight style={{paddingTop:5, borderRadius:30, justifyContent:"center",alignItems:"center", width: (Dimensions.get('window').width * 9) / 10,
-              height: (Dimensions.get('window').height * 2) / 10,backgroundColor:"white"}} onPress={() => this.submit(item)}>
-                <View style={styles.containerLateral}>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      source={{uri: item.foto}}
-                      style={{width: (Dimensions.get('window').width * 2.5) / 10,
-                      height: (Dimensions.get('window').height * 1.5) / 10,}}
-                    />
+
+            onChangeText={text => this.searchFilterFunction(text)}
+            autoCorrect={false}
+
+            value={this.state.value}
+          /><View style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
+            name="ios-search"
+            size={30}
+            style={{ alignItems: "flex-end" }}
+          /></View></View>
+          <View style={{ flex: 10, justifyContent: "center", alignItems: "center" }} >
+            <FlatList
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <TouchableHighlight style={{
+                  paddingTop: 5, borderRadius: 30, justifyContent: "center", alignItems: "center", width: (Dimensions.get('window').width * 9) / 10,
+                  height: (Dimensions.get('window').height * 2) / 10, backgroundColor: "white"
+                }} onPress={() => this.submit(item)}>
+                  <View style={styles.containerLateral}>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={{ uri: item.foto }}
+                        style={{
+                          width: (Dimensions.get('window').width * 2.5) / 10,
+                          height: (Dimensions.get('window').height * 1.5) / 10,
+                        }}
+                      />
+                    </View>
+
+                    <View style={{ flex: 3, marginRight: 10, paddingTop: 24 }}>
+                      <View style={styles.containerTextoTitulo}>
+                        <Text style={styles.titulo}>{item.titulo}</Text>
+                      </View>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>
+                          {item.Vaga} - {item.cidade}
+                        </Text>
+                      </View>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>Saida: {item.Saída}</Text>
+                      </View>
+
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>Duração: {item.Duração}</Text>
+                      </View>
+                    </View>
                   </View>
+                </TouchableHighlight>
+              )}
+              ItemSeparatorComponent={this.renderSeparator}
 
-                  <View style={{flex: 3, marginRight: 10,paddingTop:24}}>
-                    <View style={styles.containerTextoTitulo}>
-                      <Text style={styles.titulo}>{item.titulo}</Text>
-                    </View>
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>
-                        {item.Vaga} - {item.cidade}
-                      </Text>
-                    </View>
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>Saida: {item.Saída}</Text>
-                    </View>
+            />
+          </View>
 
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>Duração: {item.Duração}</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableHighlight>
-            )}
-            ItemSeparatorComponent={this.renderSeparator}
-            
-          />
         </View>
-        
-      </View>
       </ImageBackground>);
   }
 }
@@ -255,29 +263,29 @@ class Informacao extends Component {
     },
   };
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     const item = navigation.getParam('dados');
     return (
       <ScrollView>
         <View style={stylesInformacao.container}>
           <View style={stylesInformacao.cabecalho}>
             <Icon name="room" size={30} color="#F2E3BC" />
-            <Text style={{color: '#F2E3BC', fontSize: 25}}>Próxima Rota</Text>
+            <Text style={{ color: '#F2E3BC', fontSize: 25 }}>Próxima Rota</Text>
           </View>
           <View style={stylesInformacao.header}>
             <Image
-              source={{uri: item.foto}}
+              source={{ uri: item.foto }}
               style={{
                 width: (Dimensions.get('window').width * 4) / 10,
                 height: (Dimensions.get('window').height * 2) / 10,
               }}
             />
             <View style={stylesInformacao.headerContent}>
-              <Text style={{color: 'white', fontSize: 20}}>{item.titulo}</Text>
-              <Text style={{color: 'white', fontSize: 15}}>
+              <Text style={{ color: 'white', fontSize: 20 }}>{item.titulo}</Text>
+              <Text style={{ color: 'white', fontSize: 15 }}>
                 Saída: {item.Saída}
               </Text>
-              <Text style={{color: 'white', fontSize: 15}}>
+              <Text style={{ color: 'white', fontSize: 15 }}>
                 Duração: {item.Duração}
               </Text>
               <View style={stylesInformacao.avaliacao}>
@@ -300,20 +308,20 @@ class Informacao extends Component {
             </Text>
           </View>
           <View style={stylesInformacao.divisoria}>
-            <Text style={{textDecorationLine: 'underline', color: 'white'}}>
+            <Text style={{ textDecorationLine: 'underline', color: 'white' }}>
               Google Maps - Waze
             </Text>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Valor</Text>
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
-            <Text style={{color: '#F2E3BC', fontSize: 15}}>
+            <Text style={{ color: '#F2E3BC', fontSize: 15 }}>
               Pagamento - Dinheiro
             </Text>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Líder de Rota</Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Image
                 source={{
                   uri:
@@ -326,10 +334,10 @@ class Informacao extends Component {
                 }}
               />
               <View style={stylesInformacao.liderContent}>
-                <Text style={{color: 'white', fontSize: 20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   Juliana Veríssimo
                 </Text>
-                <Text style={{color: 'white', fontSize: 20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   43 Rotas Concluidas
                 </Text>
               </View>
@@ -338,7 +346,7 @@ class Informacao extends Component {
           <View style={stylesInformacao.divisoria}>
             <Button
               buttonStyle={stylesInformacao.botaoCancelar}
-              title={<Text style={{color: 'red'}}>Cancelar Rota</Text>}
+              title={<Text style={{ color: 'red' }}>Cancelar Rota</Text>}
               icon={<Icon name="clear" size={20} color="red" />}
               onPress={() => this.props.navigation.goBack()}
             />
@@ -417,7 +425,7 @@ class HistoricoScreen extends Component {
           'https://media-cdn.tripadvisor.com/media/photo-s/18/99/d8/ed/paulista.jpg',
       },
     ]; //URL da API  do JSON com as informações
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     this.setState({
       data: url,
@@ -471,13 +479,13 @@ class HistoricoScreen extends Component {
     //console.log(global.cont)
     //const { navigation } = this.props;
     //const itemId = navigation.getParam('dados');
-    this.props.navigation.navigate('Modal', {dados: item}); //Próxima rota
+    this.props.navigation.navigate('Modal', { dados: item }); //Próxima rota
   }
 
   render() {
     if (this.state.loading) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
         </View>
       );
@@ -485,60 +493,60 @@ class HistoricoScreen extends Component {
     //console.log(global.aux)
     return (
       //		{"Cidade":"Poços de caldas","Titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
-      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
-      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
-        <View
-          style={{
-            flex: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#F2E3BC',
-          }}>
-          <Text style={styles.titulo2}>Histórico</Text>
-        </View>
-        <View style={{flex: 14}}>
-          <FlatList
-            data={this.state.data}
-            renderItem={({item}) => (
-              <TouchableHighlight onPress={() => this.submit(item)}>
-                <View style={styles.containerLateral}>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      source={{uri: item.foto}}
-                      style={{width: 80, height: 80}}
-                    />
-                  </View>
-
-                  <View style={{flex: 3, marginRight: 10}}>
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.titulo}>{item.titulo}</Text>
-                    </View>
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>
-                        {item.Vaga} - {item.cidade}
-                      </Text>
-                    </View>
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>Saida: {item.Saída}</Text>
+      <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
+        <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
+          <View
+            style={{
+              flex: 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#F2E3BC',
+            }}>
+            <Text style={styles.titulo2}>Histórico</Text>
+          </View>
+          <View style={{ flex: 14 }}>
+            <FlatList
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <TouchableHighlight onPress={() => this.submit(item)}>
+                  <View style={styles.containerLateral}>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={{ uri: item.foto }}
+                        style={{ width: 80, height: 80 }}
+                      />
                     </View>
 
-                    <View style={styles.containerTexto}>
-                      <Text style={styles.texto}>Duração: {item.Duração}</Text>
+                    <View style={{ flex: 3, marginRight: 10 }}>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.titulo}>{item.titulo}</Text>
+                      </View>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>
+                          {item.Vaga} - {item.cidade}
+                        </Text>
+                      </View>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>Saida: {item.Saída}</Text>
+                      </View>
+
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>Duração: {item.Duração}</Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </TouchableHighlight>
-            )}
-            ItemSeparatorComponent={this.renderSeparator}
-            ListHeaderComponent={this.renderHeader}
-          />
+                </TouchableHighlight>
+              )}
+              ItemSeparatorComponent={this.renderSeparator}
+              ListHeaderComponent={this.renderHeader}
+            />
+          </View>
         </View>
-      </View>
       </ImageBackground>
     );
   }
@@ -559,27 +567,22 @@ class LiderScreen extends Component {
       dialogVisible: false,
       quantidadeItem: 0,
     };
-    this.submit = this.submit.bind(this);
     this.arrayholder = [];
   }
 
-  submit() {
-    this.props.navigation.navigate('CriarRota'); //Próxima rota
-  }
 
   render() {
     if (this.state.loading) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
         </View>
       );
     }
     //console.log(global.aux)
     return (
-      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
-     
-      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
+
+      <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
         <View
           style={{
             flex: 2,
@@ -595,142 +598,43 @@ class LiderScreen extends Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <TouchableOpacity
-            style={[styles.button]}
-            onPress={() => this.submit()}>
-            <Text style={styles.buttonText}>Nova Rota</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button]}>
-            <Text style={styles.buttonText}>Editar Rota</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button]}>
-            <Text style={styles.buttonText}>Editar dados</Text>
-          </TouchableOpacity>
+          <Button
+            buttonStyle = {styles.botaoLogin}
+            onPress={() => this.props.navigation.navigate('CriarRota')}
+            title={<Text style={{ color: 'white' }}>Criar Rota</Text>}>
+          </Button>
+          <Button
+            buttonStyle = {styles.botaoLogin}
+            onPress={() => this.props.navigation.navigate('EditarRotaScreen')}
+            title={<Text style={{ color: 'white' }}>Editar Rota</Text>}>
+          </Button>
+          <Button
+            buttonStyle = {styles.botaoLogin}
+            onPress={() => this.props.navigation.navigate('EditarDados')}
+            title={<Text style={{ color: 'white' }}>Editar Dados</Text>}>
+          </Button>
         </View>
       </View>
-    </ImageBackground>);
+    );
   }
 }
 
-class CriarRotaScreen extends Component {
-  constructor(props) {
-    super(props);
-    global.cont = 0;
-    global.aux = [];
 
-    this.state = {
-      loading: false,
-      data: [],
-      error: null,
-      selecionado: [],
-      dialogVisible: false,
-      quantidadeItem: 0,
-    };
-    this.submit = this.submit.bind(this);
-    this.arrayholder = [];
-  }
-  submit() {
-    console.log('opa');
-  }
-
-  render() {
-    return (
-      <ImageBackground source={{uri:'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg'}} style={{width: '100%', height: '100%'}}>
-     
-      <View style={{flex: 1, backgroundColor: '#e6e6e699'}}>
-        <View
-          style={{
-            flex: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#F2E3BC',
-          }}>
-          <Text style={styles.titulo2}>Adicionando rota</Text>
-        </View>
-        <View
-          style={{
-            flex: 14,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ScrollView>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Data"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Hora"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Quantidade de horas"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Quantidade de pessoas envolvidas (turistas)"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Personalidade da rota"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Descrição da rota"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-              />
-            </View>
-          </ScrollView>
-          <View
-            style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
-            <TouchableOpacity
-              style={[styles.button]}
-              onPress={() => this.props.navigation.goBack()}>
-              <Text style={styles.buttonText}>Salvar dados</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      </ImageBackground>);
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },searchSection: {
-    flex: 1.3,margin:20,
+  }, searchSection: {
+    flex: 1.3, margin: 20,
     flexDirection: 'row',
-    justifyContent: 'flex-start',backgroundColor:"white",
-    alignItems: 'center',borderRadius:40,paddingLeft:10
-},
+    justifyContent: 'flex-start', backgroundColor: "white",
+    alignItems: 'center', borderRadius: 40, paddingLeft: 10
+  },
   containerLateral: {
     flex: 1,
-    flexDirection: 'row',paddingLeft:20
+    flexDirection: 'row', paddingLeft: 20
   },
   titulo: {
     fontWeight: 'bold',
@@ -754,20 +658,19 @@ const styles = StyleSheet.create({
     flex: 0.2,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-  },containerTextoTitulo:{
+  }, containerTextoTitulo: {
     flex: 0.15,
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',paddingBottom:15
+    alignItems: 'flex-end', paddingBottom: 15
   },
   button: {
-    backgroundColor: '#67AAF9',
-    borderRadius: 8,
-    height: 56,
-    width: 200,
-    paddingHorizontal: 24,
-    justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 8,
+    justifyContent: 'center',
+    backgroundColor: "rgb(87, 128, 178)",
+    borderRadius: 20,
+    width: (Dimensions.get('window').width) * 6 / 10,
+    height: (Dimensions.get('window').height) * 0.6 / 10,
+    margin: 15
   },
   buttonText: {
     color: '#ffffff',
@@ -791,6 +694,13 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     borderRadius: 10,
   },
+  botaoLogin:{
+    alignItems: 'center',
+    backgroundColor: "rgb(87, 128, 178)",
+    borderRadius: 20,
+    width: (Dimensions.get('window').width) * 8 / 10,
+    margin: 15
+  }
 });
 
 const stylesInformacao = StyleSheet.create({
@@ -839,6 +749,7 @@ const stylesInformacao = StyleSheet.create({
     backgroundColor: '#60ABAB',
   },
 });
+
 const RootStack = createStackNavigator(
   {
     Home: MainScreen,
@@ -846,6 +757,8 @@ const RootStack = createStackNavigator(
     Historico: HistoricoScreen,
     Lider: LiderScreen,
     CriarRota: CriarRotaScreen,
+    EditarRotaScreen: EditarRotaScreen,
+    EditarDados: EditarDados,
   },
   {
     initialRouteName: 'Home',
