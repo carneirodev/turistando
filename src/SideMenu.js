@@ -6,7 +6,6 @@ import { ScrollView, Text, View, AsyncStorage, Dimensions, StyleSheet } from 're
 import { Button, Icon } from "react-native-elements"
 import 'react-native-gesture-handler';
 //import Icon from 'react-native-vector-icons/FontAwesome';
-import IOSIcon from 'react-native-vector-icons/Ionicons';
 class SideMenu extends Component {
 	navigateToScreen = (route) => () => {
 		const navigateAction = NavigationActions.navigate({
@@ -66,14 +65,11 @@ class SideMenu extends Component {
 					</View>
 				</ScrollView>
 				<View style={styles.footerContainer}>
-					<Button title="Sair" onPress={this._signOutAsync}></Button>
+					<Button title="Sobre" onPress={this._signOutAsync}></Button>
 				</View>
+				
 				<View style={styles.footerContainer}>
-					<Text style={{
-						fontFamily: 'arial',
-						color: 'white',
-						fontSize: 20,
-					}}>Sobre</Text>
+					<Button title="Sair" onPress={this._signOutAsync}></Button>
 				</View>
 			</View>
 		);

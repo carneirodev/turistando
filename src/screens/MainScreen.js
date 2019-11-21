@@ -26,6 +26,7 @@ import IOSIcon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
+import HistoricoScreen from './HistoricoScreen'
 import CriarRotaScreen from './CriarRotaScreen';
 import EditarRotaScreen from './EditarRotaScreen';
 import EditarDados from './EditarDados';
@@ -346,7 +347,7 @@ class Informacao extends Component {
           <View style={stylesInformacao.divisoria}>
             <Button
               buttonStyle={stylesInformacao.botaoCancelar}
-              title={<Text style={{ color: 'red' }}>Cancelar Rota</Text>}
+              title={<Text style={{ color: 'red' }}>FECHAR</Text>}
               icon={<Icon name="clear" size={20} color="red" />}
               onPress={() => this.props.navigation.goBack()}
             />
@@ -357,200 +358,6 @@ class Informacao extends Component {
   }
 }
 
-class HistoricoScreen extends Component {
-  //Tela inicial, nesta tela esta a pesquisa
-  constructor(props) {
-    super(props);
-    global.cont = 0;
-    global.aux = [];
-
-    this.state = {
-      loading: false,
-      data: [],
-      error: null,
-      selecionado: [],
-      dialogVisible: false,
-      quantidadeItem: 0,
-    };
-    this.submit = this.submit.bind(this);
-    this.arrayholder = [];
-  }
-  //Comentado até o backend estar pronto
-  componentDidMount() {
-    this.makeRemoteRequest();
-  }
-
-  makeRemoteRequest = () => {
-    const url = [
-      {
-        Id: 1,
-        valor: '55,00',
-        localDeSaida: 'Avenida 3, 350 - Centro',
-        cidade: 'Poços de caldas',
-        titulo: 'Igrejas Históricas',
-        Saída: '11/11 - 14:00',
-        Duração: '3 Horas',
-        Vaga: '2 Vagas',
-        description:
-          'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
-        foto:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
-      },
-      {
-        Id: 2,
-        valor: '80,00',
-        localDeSaida: 'Avenida Joao Pinheiro, 340 - Centro',
-        cidade: 'Poços de caldas',
-        titulo: '#Partiu Praias',
-        Saída: '11/11 - 10:00',
-        Duração: '5 Horas',
-        Vaga: '2 Vagas',
-        description:
-          'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela pela praia.',
-        foto:
-          'https://www.viajali.com.br/wp-content/uploads/2018/01/praia-do-gunga-1-730x730.jpg',
-      },
-      {
-        Id: 4,
-        valor: '50,00',
-        localDeSaida: 'Avenida 1, 310 - Centro',
-        cidade: 'São Paulo',
-        titulo: 'Passeio Turistico',
-        Saída: '12/11 - 16:00',
-        Duração: '3 Horas',
-        Vaga: '5 Vagas',
-        description:
-          'Serão visitadas monumentos da região em um passeio imersivo para o turista conhecer a história da maior cidade do Brasil .',
-        foto:
-          'https://media-cdn.tripadvisor.com/media/photo-s/18/99/d8/ed/paulista.jpg',
-      },
-    ]; //URL da API  do JSON com as informações
-    this.setState({ loading: true });
-
-    this.setState({
-      data: url,
-      loading: false,
-    });
-    this.arrayholder = url;
-  };
-
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: '100%',
-          backgroundColor: '#CED0CE',
-        }}
-      />
-    );
-  };
-
-  // searchFilterFunction = text => {
-  //   this.setState({
-  // 	value: text,
-  //   });
-
-  //   const newData = this.arrayholder.filter(item => {
-  // 	const itemData = `${item.cidade.toUpperCase()} `;
-  // 	const textData = text.toUpperCase();
-
-  // 	return itemData.indexOf(textData) > -1;
-  //   });
-  //   this.setState({
-  // 	data: newData,
-  //   });
-  // };
-
-  // renderHeader = () => {
-  //   return (
-  // 	<SearchBar
-  // 	  placeholder="Pesquise uma cidade"
-  // 	  lightTheme
-  // 	  round
-  // 	  onChangeText={text => this.searchFilterFunction(text)}
-  // 	  autoCorrect={false}
-  // 	  value={this.state.value}
-  // 	/>
-  //   );
-  // };
-
-  submit(item) {
-    //console.log(global.cont)
-    //const { navigation } = this.props;
-    //const itemId = navigation.getParam('dados');
-    this.props.navigation.navigate('Modal', { dados: item }); //Próxima rota
-  }
-
-  render() {
-    if (this.state.loading) {
-      return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
-    //console.log(global.aux)
-    return (
-      //		{"Cidade":"Poços de caldas","Titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
-      <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
-        <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
-          <View
-            style={{
-              flex: 2,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#F2E3BC',
-            }}>
-            <Text style={styles.titulo2}>Histórico</Text>
-          </View>
-          <View style={{ flex: 14 }}>
-            <FlatList
-              data={this.state.data}
-              renderItem={({ item }) => (
-                <TouchableHighlight onPress={() => this.submit(item)}>
-                  <View style={styles.containerLateral}>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={{ uri: item.foto }}
-                        style={{ width: 80, height: 80 }}
-                      />
-                    </View>
-
-                    <View style={{ flex: 3, marginRight: 10 }}>
-                      <View style={styles.containerTexto}>
-                        <Text style={styles.titulo}>{item.titulo}</Text>
-                      </View>
-                      <View style={styles.containerTexto}>
-                        <Text style={styles.texto}>
-                          {item.Vaga} - {item.cidade}
-                        </Text>
-                      </View>
-                      <View style={styles.containerTexto}>
-                        <Text style={styles.texto}>Saida: {item.Saída}</Text>
-                      </View>
-
-                      <View style={styles.containerTexto}>
-                        <Text style={styles.texto}>Duração: {item.Duração}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableHighlight>
-              )}
-              ItemSeparatorComponent={this.renderSeparator}
-              ListHeaderComponent={this.renderHeader}
-            />
-          </View>
-        </View>
-      </ImageBackground>
-    );
-  }
-}
 
 class LiderScreen extends Component {
   //Tela inicial, nesta tela esta a pesquisa
@@ -607,12 +414,13 @@ class LiderScreen extends Component {
             buttonStyle = {styles.botaoLogin}
             onPress={() => this.props.navigation.navigate('EditarRotaScreen')}
             title={<Text style={{ color: 'white' }}>Editar Rota</Text>}>
-          </Button>
+              </Button>
+          {/* 
           <Button
             buttonStyle = {styles.botaoLogin}
             onPress={() => this.props.navigation.navigate('EditarDados')}
             title={<Text style={{ color: 'white' }}>Editar Dados</Text>}>
-          </Button>
+          </Button> */}
         </View>
       </View>
     );
