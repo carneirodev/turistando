@@ -59,7 +59,7 @@ export default class SignInScreen extends React.Component {
                     </Button>
                     <Button
                         buttonStyle={styles.botaoVazio}
-                        onPress={this._signUp}
+                        onPress={this._esqueceuSenha}
                         title={<Text style={{ color: "rgb(87, 128, 178)" }}>Esqueceu a senha?</Text>}>
                     </Button>
                     <Button
@@ -80,6 +80,10 @@ export default class SignInScreen extends React.Component {
 
     _signUp = async () => {
         this.props.navigation.navigate('SignUp');
+    };
+
+    _esqueceuSenha = async () => {
+        this.props.navigation.navigate('EsqueceuSenha');
     };
 
 }

@@ -404,6 +404,7 @@ class LiderScreen extends Component {
             flex: 14,
             justifyContent: 'center',
             alignItems: 'center',
+            
           }}>
           <Button
             buttonStyle = {styles.botaoLogin}

@@ -26,6 +26,10 @@ export default class EditarDados extends Component {
         this.arrayholder = [];
     }
 
+    onChangeText = (key, val) => {
+        this.setState({ [key]: val })
+    }
+
     saveChanges = async () => {
         const { username, password, email, phone_number } = this.state
         try {
@@ -60,6 +64,16 @@ export default class EditarDados extends Component {
                     }}>
                     <ScrollView>
                         <View style={styles.container}>
+                            <View style={styles.containerPicker}>
+                                <Text style={styles.texto}>Faça uma BIO para te conhecerem melhor</Text>
+                                <TextInput
+                                    style={styles.inputMenor}
+                                    placeholder='Bio'
+                                    autoCapitalize="none"
+                                    placeholderTextColor="rgb(87, 128, 178)"
+                                    onChangeText={val => this.onChangeText('bio', val)}
+                                />
+                            </View>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Nome'
@@ -88,6 +102,13 @@ export default class EditarDados extends Component {
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
                                 onChangeText={val => this.onChangeText('telefone', val)}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder='Idade'
+                                autoCapitalize="none"
+                                placeholderTextColor="rgb(87, 128, 178)"
+                                onChangeText={val => this.onChangeText('idade', val)}
                             />
                             <TextInput
                                 style={styles.input}

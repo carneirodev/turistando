@@ -9,6 +9,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import SignInScreen from './src/screens/SignInScreen'
 import SignUp from './src/screens/SignUp'
 import AuthLoadingScreen from './src/screens/AuthLoadingScreen'
+import EsqueceuSenha from './src/screens/EsqueceuSenha'
 
 
 const App = createDrawerNavigator({
@@ -27,7 +28,7 @@ const App = createDrawerNavigator({
 
 
 const AppStack = createStackNavigator({ App });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp:SignUp });
+const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp:SignUp, EsqueceuSenha:EsqueceuSenha });
 
 export default createAppContainer(createSwitchNavigator(
 	{

@@ -73,6 +73,20 @@ export default class SignUp extends React.Component {
                     />
                     <TextInput
                         style={styles.input}
+                        placeholder='Idade'
+                        autoCapitalize="none"
+                        placeholderTextColor="rgb(87, 128, 178)"
+                        onChangeText={val => this.onChangeText('idade', val)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Bairro'
+                        autoCapitalize="none"
+                        placeholderTextColor="rgb(87, 128, 178)"
+                        onChangeText={val => this.onChangeText('bairro', val)}
+                    />
+                    <TextInput
+                        style={styles.input}
                         placeholder='Bairro'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
