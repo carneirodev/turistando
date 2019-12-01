@@ -113,18 +113,20 @@ export default class SignInScreen extends React.Component {
                 });
 
 
-                await AsyncStorage.setItem('@safeEconomy:token', response.data.token);
-
+                await AsyncStorage.setItem('@turistando2:token', response.data.token);
+/*
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [
                         NavigationActions.navigate({ routeName: 'MainScreen' }),
                     ],
                 });
-                this.props.navigation.dispatch(resetAction);
+                this.props.navigation.dispatch(resetAction);*/
+                this.props.navigation.navigate('App');
             } catch (_err) {
                 this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema com o login, verifique suas credenciais!');
+                console.log(_err);
             }
         }
     };

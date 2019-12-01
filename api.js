@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://turistando.herokuapp.com/', 
+  baseURL: 'https://turitando.herokuapp.com/', 
 });
 
 export default api;
