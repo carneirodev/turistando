@@ -22,10 +22,11 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+//<script type="text/javascript" src="https://js.iugu.com/v2"></script>
 import IOSIcon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-
+import IuguScreen from './Pagamento'
 import HistoricoScreen from './HistoricoScreen'
 import CriarRotaScreen from './CriarRotaScreen';
 import EditarRotaScreen from './EditarRotaScreen';
@@ -176,7 +177,7 @@ class MainScreen extends Component {
     //const itemId = navigation.getParam('dados');
     this.props.navigation.navigate('Modal', { dados: item }); //Próxima rota
   }
-
+  
   render() {
     if (this.state.loading) {
       return (
@@ -316,9 +317,11 @@ class Informacao extends Component {
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Valor</Text>
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
-            <Text style={{ color: '#F2E3BC', fontSize: 15 }}>
-              Pagamento - Dinheiro
-            </Text>
+            <Button
+            buttonStyle = {styles.botaoLogin}
+            onPress={() => this.props.navigation.navigate('Pagamento')}
+            title={<Text style={{ color: 'white' }}>Pagar</Text>}>
+          </Button>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Líder de Rota</Text>
@@ -568,6 +571,7 @@ const RootStack = createStackNavigator(
     CriarRota: CriarRotaScreen,
     EditarRotaScreen: EditarRotaScreen,
     EditarDados: EditarDados,
+    Pagamento: IuguScreen,
   },
   {
     initialRouteName: 'Home',
