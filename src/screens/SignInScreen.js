@@ -8,6 +8,7 @@ import {
     StyleSheet,
     View,
     Text,
+    Alert,
     ScrollView
 } from 'react-native';
 import { Button, Icon } from "react-native-elements"
@@ -15,7 +16,7 @@ import backImage from '../img/backLogin.jpg'
 //import backLogo from '../img/logo.png'
 import logo from '../img/logoNome.png'
 import { TextInput } from 'react-native-gesture-handler';
-
+import api from '../../api';
 
 
 export default class SignInScreen extends React.Component {
@@ -25,9 +26,19 @@ export default class SignInScreen extends React.Component {
         header: null,
     };
 
+    state = { email: '', password: '', error: '' };
+
+    handleEmailChange = (email) => {
+        this.setState({ email });
+    };
+
+    handlePasswordChange = (password) => {
+        this.setState({ password });
+    };
+
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
 
                 <View style={styles.centralizar}>
                     <View style={styles.containerLogo}>
@@ -42,7 +53,13 @@ export default class SignInScreen extends React.Component {
                             size={40}
                             color="rgb(87, 128, 178)"
                         />
-                        <TextInput style={styles.inputLogin} placeholderTextColor="rgb(87, 128, 178)" placeholder={"Email"}></TextInput>
+                        <TextInput
+                            style={styles.inputLogin}
+                            placeholderTextColor="rgb(87, 128, 178)"
+                            placeholder={"Email"}
+                            value={this.state.email}
+                            onChangeText={this.handleEmailChange}>
+                        </TextInput>
                     </View>
                     <View style={styles.containerRow}>
                         <Icon
@@ -50,7 +67,14 @@ export default class SignInScreen extends React.Component {
                             size={40}
                             color="rgb(87, 128, 178)"
                         />
-                        <TextInput style={styles.inputLogin} placeholderTextColor="rgb(87, 128, 178)" placeholder={"Senha"}></TextInput>
+                        <TextInput
+                            style={styles.inputLogin}
+                            placeholderTextColor="rgb(87, 128, 178)"
+                            placeholder={"Senha"}
+                            value={this.state.password}
+                            onChangeText={this.handlePasswordChange}
+                            secureTextEntry>
+                        </TextInput>
                     </View>
                     <Button
                         buttonStyle={styles.botaoLogin}
@@ -69,13 +93,40 @@ export default class SignInScreen extends React.Component {
                     </Button>
                 </View>
 
-            </View>
+            </ScrollView>
         );
     }
 
     _signInAsync = async () => {
+        /*
         await AsyncStorage.setItem('userToken', 'abc');
         this.props.navigation.navigate('App');
+        */
+        if (this.state.email.length === 0 || this.state.password.length === 0) {
+            this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
+            Alert.alert('Erro', 'Preencha usuário e senha para continuar!');
+        } else {
+            try {
+                const response = await api.post('/authenticate', {
+                    email: this.state.email,
+                    password: this.state.password,
+                });
+
+
+                await AsyncStorage.setItem('@safeEconomy:token', response.data.token);
+
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({ routeName: 'MainScreen' }),
+                    ],
+                });
+                this.props.navigation.dispatch(resetAction);
+            } catch (_err) {
+                this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
+                Alert.alert('Erro', 'Houve um problema com o login, verifique suas credenciais!');
+            }
+        }
     };
 
     _signUp = async () => {
@@ -144,7 +195,7 @@ const styles = StyleSheet.create({
         width: (Dimensions.get('window').width) * 8 / 10,
         margin: 15
     },
-    botaoVazio:{
+    botaoVazio: {
         marginTop: 10,
         backgroundColor: "#FFF",
     }
