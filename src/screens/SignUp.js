@@ -20,7 +20,8 @@ export default class SignUp extends React.Component {
 
     state = {
         name: '', lastName: '', email: '', password: '', telefone: '', bairro: '', cidade: '',
-        personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '', bio: ''
+        personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '', 
+        bio: 'Adicione uma bio para que possam te conhecer melhor! Basta clicar em Editar Perfil!'
     }
 
     onChangeText = (key, val) => {
@@ -53,7 +54,7 @@ export default class SignUp extends React.Component {
                     bio: this.state.bio
                 });
 
-                this.props.navigation.navigate('App');
+                this.props.navigation.navigate('Auth');
             } catch (_err) {
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');

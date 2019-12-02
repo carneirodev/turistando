@@ -114,7 +114,19 @@ export default class SignInScreen extends React.Component {
                 });
 
 
-                await AsyncStorage.setItem('@turistando2:token', response.data.token);
+                let link = '/showUserByEmail/' + this.state.email
+                const response2 = await api.get(link, {
+                    headers: {
+                        'Authorization': `Bearer ${response.data.token}`
+                    }
+                });
+                const tipo = response2.data.tipo
+
+                //await AsyncStorage.setItem('@turistando2:token', response.data.token);
+                //await AsyncStorage.setItem('@turistando2:user', response.data);
+                await AsyncStorage.multiSet([['@turistando2:token', response.data.token],
+                ['@turistando2:userEmail', this.state.email],
+                ['@turistando2:userTipo', tipo]])
 /*
                 const resetAction = StackActions.reset({
                     index: 0,

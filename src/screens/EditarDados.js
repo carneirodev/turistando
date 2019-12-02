@@ -7,23 +7,57 @@ import {
     ScrollView,
     TextInput,
     Keyboard,
-    Picker
+    Picker,
+    Alert,
+    AsyncStorage,
+    ActivityIndicator
 } from 'react-native';
 import {
     Button,
 } from 'react-native-elements';
+import api from '../../api';
 
 
 export default class EditarDados extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
-            loading: false,
+            loading: true,
+            user: [],
+            error: null,
+            dialogVisible: false,
+            name: '', lastName: '', email: '', telefone: '', bairro: '', cidade: '', bio: '',
+            personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '',
         };
+    }
 
-        this.arrayholder = [];
+    componentDidMount = async () => {
+        const email = await AsyncStorage.getItem('@turistando2:userEmail');
+        const token = await AsyncStorage.getItem('@turistando2:token');
+        let link = '/showUserByEmail/' + email
+        const usuario = await api.get(link, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        this.setState({
+            user: usuario.data,
+            name: usuario.data.name,
+            lastName: usuario.data.lastName,
+            email: usuario.data.email,
+            telefone: usuario.data.telefone,
+            bairro: usuario.data.bairro,
+            cidade: usuario.data.cidade,
+            personalidade: usuario.data.personalidade,
+            tipo: usuario.data.tipo,
+            hotel: usuario.data.hotel,
+            disp: usuario.data.disp,
+            avaliacao: usuario.data.avaliacao,
+            idade: usuario.data.idade,
+            bio: usuario.data.bio,
+            loading: false
+        });
     }
 
     onChangeText = (key, val) => {
@@ -31,20 +65,61 @@ export default class EditarDados extends Component {
     }
 
     saveChanges = async () => {
-        const { username, password, email, phone_number } = this.state
-        try {
-            // here place your signup logic///////////////
+        if (this.state.email.length === 0
+            || this.state.name.length === 0 || this.state.lastName.length === 0
+            || this.state.telefone.length === 0 || this.state.bairro.length === 0
+            || this.state.cidade.length === 0 || this.state.idade.length === 0) {
+            this.setState({ error: 'Preencha todos os dados de usuário!' }, () => false);
+            Alert.alert('Erro', 'Preencha todos os dados de usuário!');
+        } else {
+            try {
+                const idUser = this.state.user.id;
+                //const idUser = await AsyncStorage.getItem('@turistando2:userEmail');
+                const token = await AsyncStorage.getItem('@turistando2:token');
+                let link = '/update/' + idUser
+                console.log("link")
+                console.log(link)
+                console.log("idUser")
+                console.log(idUser)
+                console.log("token")
+                console.log(token)
+                const response = await api.put(link, {
+                    headers: {
+                        'Authorization': `Bearer ${response.data.token}`
+                    },
+                    name: this.state.name,
+                    lastName: this.state.lastName,
+                    email: this.state.email,
+                    telefone: this.state.telefone,
+                    bairro: this.state.bairro,
+                    cidade: this.state.cidade,
+                    personalidade: this.state.personalidade,
+                    tipo: this.state.tipo,
+                    hotel: this.state.hotel,
+                    disp: this.state.disp,
+                    avaliacao: this.state.avaliacao,
+                    idade: this.state.idade,
+                    bio: this.state.bio
+                });
 
-            /////////////////////////////
-            await AsyncStorage.setItem('userToken', 'abc');
-            this.props.navigation.goBack();
-            console.log('user successfully signed up!: ', success)
-        } catch (err) {
-            console.log('error signing up: ', err)
+                this.props.navigation.goBack();
+            } catch (_err) {
+                this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
+                Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');
+                console.log(_err);
+            }
         }
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator />
+                </View>
+            );
+        }
+
         return (
             <View style={{ flex: 1, backgroundColor: '#FFF' }}>
                 <View
@@ -65,12 +140,13 @@ export default class EditarDados extends Component {
                     <ScrollView>
                         <View style={styles.container}>
                             <View style={styles.containerPicker}>
-                                <Text style={styles.texto}>Faça uma BIO para te conhecerem melhor</Text>
+                                <Text style={styles.texto}>Faça uma BIO para que possam te conhecer melhor!</Text>
                                 <TextInput
                                     style={styles.inputMenor}
                                     placeholder='Bio'
                                     autoCapitalize="none"
                                     placeholderTextColor="rgb(87, 128, 178)"
+                                    value={this.state.bio}
                                     onChangeText={val => this.onChangeText('bio', val)}
                                 />
                             </View>
@@ -79,21 +155,26 @@ export default class EditarDados extends Component {
                                 placeholder='Nome'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.name}
+                                textContentType={"name"}
                                 onChangeText={val => this.onChangeText('name', val)}
                             />
                             <TextInput
                                 style={styles.input}
-                                placeholder='Senha'
-                                secureTextEntry={true}
+                                placeholder='Sobrenome'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
-                                onChangeText={val => this.onChangeText('password', val)}
+                                value={this.state.lastName}
+                                textContentType={"familyName"}
+                                onChangeText={val => this.onChangeText('lastName', val)}
                             />
                             <TextInput
                                 style={styles.input}
                                 placeholder='Email'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.email}
+                                keyboardType={"email-address"}
                                 onChangeText={val => this.onChangeText('email', val)}
                             />
                             <TextInput
@@ -101,6 +182,9 @@ export default class EditarDados extends Component {
                                 placeholder='Telefone(Formato: 021-999999999)'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.telefone}
+                                keyboardType={"phone-pad"}
+                                maxLength={15}
                                 onChangeText={val => this.onChangeText('telefone', val)}
                             />
                             <TextInput
@@ -108,6 +192,7 @@ export default class EditarDados extends Component {
                                 placeholder='Idade'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.idade}
                                 onChangeText={val => this.onChangeText('idade', val)}
                             />
                             <TextInput
@@ -115,6 +200,7 @@ export default class EditarDados extends Component {
                                 placeholder='Bairro'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.bairro}
                                 onChangeText={val => this.onChangeText('bairro', val)}
                             />
                             <TextInput
@@ -122,33 +208,34 @@ export default class EditarDados extends Component {
                                 placeholder='Cidade'
                                 autoCapitalize="none"
                                 placeholderTextColor="rgb(87, 128, 178)"
+                                value={this.state.cidade}
                                 onChangeText={val => this.onChangeText('cidade', val)}
                             />
                             <View style={styles.containerPicker}>
                                 <Text style={styles.texto}>Qual seu jeito?</Text>
                                 <Picker
-                                    selectedValue={this.state.language}
+                                    selectedValue={this.state.personalidade}
                                     style={styles.pickerEstilo}
                                     pickerStyleType={styles.input}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({ language: itemValue })
+                                        this.setState({ personalidade: itemValue })
                                     }>
                                     <Picker.Item label="Aventureiro!" value="aventureiro" />
                                     <Picker.Item label="Cultural!" value="cultural" />
-                                    <Picker.Item itemStyle={styles.texto} label="Baladeiro!" value="baladeiro" />
+                                    <Picker.Item label="Baladeiro!" value="baladeiro" />
                                     <Picker.Item label="Tradicional!" value="tradicional" />
                                 </Picker>
                             </View>
                             <View style={styles.containerPicker}>
                                 <Text style={styles.texto}>QUEM VOCÊ QUER SER?</Text>
                                 <Picker
-                                    selectedValue={this.state.language}
+                                    selectedValue={this.state.tipo}
                                     style={styles.pickerEstilo}
                                     pickerStyleType={styles.input}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({ language: itemValue })
+                                        this.setState({ tipo: itemValue })
                                     }>
-                                    <Picker.Item itemStyle={styles.texto} label="Quero ser turista!" value="turista" />
+                                    <Picker.Item label="Quero ser turista!" value="turista" />
                                     <Picker.Item label="Quero ser líder de Rota!" value="lider" />
                                 </Picker>
                             </View>
@@ -160,7 +247,8 @@ export default class EditarDados extends Component {
                                     placeholder='POUSADA/HOSTEL'
                                     autoCapitalize="none"
                                     placeholderTextColor="rgb(87, 128, 178)"
-                                    onChangeText={val => this.onChangeText('pousadaHostel', val)}
+                                    value={this.state.hotel}
+                                    onChangeText={val => this.onChangeText('hotel', val)}
                                 />
                             </View>
                             <View style={styles.containerPicker}>
@@ -172,12 +260,13 @@ export default class EditarDados extends Component {
                                     placeholder='Dias disponíveis'
                                     autoCapitalize="none"
                                     placeholderTextColor="rgb(87, 128, 178)"
-                                    onChangeText={val => this.onChangeText('diasDisponiveis', val)}
+                                    value={this.state.disp}
+                                    onChangeText={val => this.onChangeText('disp', val)}
                                 />
                             </View>
                             <Button
-                                title='Salvar'
-                                onPress={() => this.props.navigation.goBack()}
+                                title='Salvar Dados'
+                                onPress={this.saveChanges}
                                 buttonStyle={styles.botao}
                             />
                         </View>

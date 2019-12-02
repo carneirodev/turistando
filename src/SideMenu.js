@@ -6,7 +6,13 @@ import { ScrollView, Text, View, AsyncStorage, Dimensions, StyleSheet } from 're
 import { Button, Icon } from "react-native-elements"
 import 'react-native-gesture-handler';
 //import Icon from 'react-native-vector-icons/FontAwesome';
+
+let botaoVar = <View></View>
+let tipo = ""
+
 class SideMenu extends Component {
+
+
 	navigateToScreen = (route) => () => {
 		const navigateAction = NavigationActions.navigate({
 			routeName: route
@@ -15,13 +21,37 @@ class SideMenu extends Component {
 		this.props.navigation.dispatch(navigateAction);
 	}
 
+
+	componentDidMount = async () => {
+        tipo = await AsyncStorage.getItem('@turistando2:userTipo');
+    }
+
+
 	_signOutAsync = async () => {
+		/*
 		await AsyncStorage.clear();
+		this.props.navigation.navigate('Auth');*/
+
+		let keys = ['@turistando2:token', '@turistando2:userEmail', '@turistando2:userTipo'];
+		await AsyncStorage.multiRemove(keys, (err) => {
+			// keys k1 & k2 removed, if they existed
+			// do most stuff after removal (if you want)
+		});
 		this.props.navigation.navigate('Auth');
 	};
 
 
 	render() {
+
+		if (tipo == "lider" || tipo == "Lider") {
+			botaoVar =
+				<View>
+					<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Lider')}>
+						Lider de rota
+					</Text>
+				</View>
+		}
+
 		return (
 			<View style={styles.container}>
 				<Button
@@ -39,14 +69,14 @@ class SideMenu extends Component {
 					<View>
 						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Home')}>
 							Rotas disponiveis
-            </Text>
+            			</Text>
 					</View>
 
 
 					<View>
 						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Historico')}>
 							Histórico
-            </Text>
+            			</Text>
 					</View>
 
 
@@ -54,20 +84,16 @@ class SideMenu extends Component {
 					<View>
 						<Text style={styles.sectionHeadingStyle} onPress={() => this.props.navigation.closeDrawer()}>
 							Ajuda
-            </Text>
+            			</Text>
 					</View>
 
+					{botaoVar}
 
-					<View>
-						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Lider')}>
-							Lider de rota
-            </Text>
-					</View>
 				</ScrollView>
 				<View style={styles.footerContainer}>
 					<Button title="Sobre" onPress={this._signOutAsync}></Button>
 				</View>
-				
+
 				<View style={styles.footerContainer}>
 					<Button title="Sair" onPress={this._signOutAsync}></Button>
 				</View>
