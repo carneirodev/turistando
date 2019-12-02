@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
-  Keyboard, ImageBackground,
+  Keyboard, ImageBackground,AsyncStorage
 } from 'react-native';
 import {
   Image,
@@ -31,6 +31,7 @@ import HistoricoScreen from './HistoricoScreen'
 import CriarRotaScreen from './CriarRotaScreen';
 import EditarRotaScreen from './EditarRotaScreen';
 import EditarDados from './EditarDados';
+import api from '../../api';
 // {"Id":1,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
 // 			{"Id":2,"cidade":"Poços de caldas","titulo":"#Partiu Prias","Saída":"11/11 - 10:00","Duração":"5 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
 // 			{"Id":3,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 16:00","Duração":"3 Horas","Vaga":"6 Vagas","description":"Uma breve descrição"}
@@ -58,87 +59,107 @@ class MainScreen extends Component {
     this.makeRemoteRequest();
   }
 
-  makeRemoteRequest = () => {
-
-    const url = [
-      {
-        Id: 1,
-        valor: '55,00',
-        localDeSaida: 'Avenida 3, 350 - Centro',
-        cidade: 'Poços de caldas',
-        titulo: 'Igrejas Históricas',
-        Saída: '11/11 - 14:00',
-        Duração: '3 Horas',
-        Vaga: '2 Vagas',
-        description:
-          'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
-        foto:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
-      },
-      {
-        Id: 2,
-        valor: '80,00',
-        localDeSaida: 'Avenida Joao Pinheiro, 340 - Centro',
-        cidade: 'Poços de caldas',
-        titulo: '#Partiu Praias',
-        Saída: '11/11 - 10:00',
-        Duração: '5 Horas',
-        Vaga: '2 Vagas',
-        description:
-          'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela pela praia.',
-        foto:
-          'https://www.viajali.com.br/wp-content/uploads/2018/01/praia-do-gunga-1-730x730.jpg',
-      },
-      {
-        Id: 3,
-        valor: '55,00',
-        localDeSaida: 'Avenida 1, 330 - Centro',
-        cidade: 'Poços de caldas',
-        titulo: 'Igrejas Históricas',
-        Saída: '11/11 - 16:00',
-        Duração: '3 Horas',
-        Vaga: '6 Vagas',
-        description:
-          'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
-        foto:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
-      },
-      {
-        Id: 4,
-        valor: '50,00',
-        localDeSaida: 'Avenida 1, 310 - Centro',
-        cidade: 'São Paulo',
-        titulo: 'Passeio Turistico',
-        Saída: '12/11 - 16:00',
-        Duração: '3 Horas',
-        Vaga: '5 Vagas',
-        description:
-          'Serão visitadas monumentos da região em um passeio imersivo para o turista conhecer a história da maior cidade do Brasil .',
-        foto:
-          'https://media-cdn.tripadvisor.com/media/photo-s/18/99/d8/ed/paulista.jpg',
-      },
-      {
-        Id: 5,
-        valor: '75,00',
-        localDeSaida: 'Avenida 1, 80 - Centro',
-        cidade: 'Rio de Janeiro',
-        titulo: 'Copa cabana',
-        Saída: '11/11 - 16:00',
-        Duração: '3 Horas',
-        Vaga: '6 Vagas',
-        description:
-          'Serão visitadas monumentos da região em um passeio maravilhoso pelo Rio de Janeiro.',
-        foto:
-          'https://upload.wikimedia.org/wikipedia/commons/6/62/Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg',
-      },
-    ]; //URL da API  do JSON com as informações
+  makeRemoteRequest = async() => {
+   try{
+    const token = await AsyncStorage.getItem('@turistando2:token')
+    const response = await api.get('/rotas',{
+      headers:{
+       'Authorization': `Bearer ${token}`
+      }
+    });
     this.setState({ loading: true });
 
     this.setState({
-      data: url,
+      data: response.data,
       loading: false,
     });
-    this.arrayholder = url;
+    this.arrayholder = response;
+  console.log(response.data)
+  }catch(response){
+    console.log("Erro:"+response)
+  }
+
+
+      // await api.get('/rotas')
+      // .then(response => {
+      //   this.setState({ data: response.data });
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      // });
+    // const url = [
+    //   {
+    //     Id: 1,
+    //     valor: '55,00',
+    //     localDeSaida: 'Avenida 3, 350 - Centro',
+    //     cidade: 'Poços de caldas',
+    //     titulo: 'Igrejas Históricas',
+    //     Saída: '11/11 - 14:00',
+    //     Duração: '3 Horas',
+    //     Vaga: '2 Vagas',
+    //     description:
+    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
+    //     foto:
+    //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
+    //   },
+    //   {
+    //     Id: 2,
+    //     valor: '80,00',
+    //     localDeSaida: 'Avenida Joao Pinheiro, 340 - Centro',
+    //     cidade: 'Poços de caldas',
+    //     titulo: '#Partiu Praias',
+    //     Saída: '11/11 - 10:00',
+    //     Duração: '5 Horas',
+    //     Vaga: '2 Vagas',
+    //     description:
+    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela pela praia.',
+    //     foto:
+    //       'https://www.viajali.com.br/wp-content/uploads/2018/01/praia-do-gunga-1-730x730.jpg',
+    //   },
+    //   {
+    //     Id: 3,
+    //     valor: '55,00',
+    //     localDeSaida: 'Avenida 1, 330 - Centro',
+    //     cidade: 'Poços de caldas',
+    //     titulo: 'Igrejas Históricas',
+    //     Saída: '11/11 - 16:00',
+    //     Duração: '3 Horas',
+    //     Vaga: '6 Vagas',
+    //     description:
+    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
+    //     foto:
+    //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
+    //   },
+    //   {
+    //     Id: 4,
+    //     valor: '50,00',
+    //     localDeSaida: 'Avenida 1, 310 - Centro',
+    //     cidade: 'São Paulo',
+    //     titulo: 'Passeio Turistico',
+    //     Saída: '12/11 - 16:00',
+    //     Duração: '3 Horas',
+    //     Vaga: '5 Vagas',
+    //     description:
+    //       'Serão visitadas monumentos da região em um passeio imersivo para o turista conhecer a história da maior cidade do Brasil .',
+    //     foto:
+    //       'https://media-cdn.tripadvisor.com/media/photo-s/18/99/d8/ed/paulista.jpg',
+    //   },
+    //   {
+    //     Id: 5,
+    //     valor: '75,00',
+    //     localDeSaida: 'Avenida 1, 80 - Centro',
+    //     cidade: 'Rio de Janeiro',
+    //     titulo: 'Copa cabana',
+    //     Saída: '11/11 - 16:00',
+    //     Duração: '3 Horas',
+    //     Vaga: '6 Vagas',
+    //     description:
+    //       'Serão visitadas monumentos da região em um passeio maravilhoso pelo Rio de Janeiro.',
+    //     foto:
+    //       'https://upload.wikimedia.org/wikipedia/commons/6/62/Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg',
+    //   },
+    // ]; //URL da API  do JSON com as informações
+ 
   };
 
   renderSeparator = () => {
@@ -186,7 +207,7 @@ class MainScreen extends Component {
         </View>
       );
     }
-
+    console.log("data"+this.data)
     return (
       <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
         <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
@@ -198,7 +219,7 @@ class MainScreen extends Component {
             autoCorrect={false}
 
             value={this.state.value}
-          /><View style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
+          /><View  style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
             name="ios-search"
             size={30}
             style={{ alignItems: "flex-end" }}
@@ -219,7 +240,7 @@ class MainScreen extends Component {
                         alignItems: 'center',
                       }}>
                       <Image
-                        source={{ uri: item.foto }}
+                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW31R1zgG2sZbXIkWAyJPoX3udunpKPXxmeGm6Q8IURIkxa9R1uw&s" }}
                         style={{
                           width: (Dimensions.get('window').width * 2.5) / 10,
                           height: (Dimensions.get('window').height * 1.5) / 10,
@@ -229,19 +250,24 @@ class MainScreen extends Component {
 
                     <View style={{ flex: 3, marginRight: 10, paddingTop: 24 }}>
                       <View style={styles.containerTextoTitulo}>
-                        <Text style={styles.titulo}>{item.titulo}</Text>
+                        <Text style={styles.titulo}>{item.nome}</Text>
                       </View>
                       <View style={styles.containerTexto}>
                         <Text style={styles.texto}>
-                          {item.Vaga} - {item.cidade}
+                          {item.qtdturistas} Vagas
                         </Text>
                       </View>
                       <View style={styles.containerTexto}>
-                        <Text style={styles.texto}>Saida: {item.Saída}</Text>
+                        <Text style={styles.texto}>
+                          {item.cidade}-{item.estado}
+                        </Text>
+                      </View>
+                      <View style={styles.containerTexto}>
+                        <Text style={styles.texto}>{item.data} - {item.hora}</Text>
                       </View>
 
                       <View style={styles.containerTexto}>
-                        <Text style={styles.texto}>Duração: {item.Duração}</Text>
+                        <Text style={styles.texto}>Duração: {item.duracao} Horas</Text>
                       </View>
                     </View>
                   </View>
@@ -264,6 +290,18 @@ class Informacao extends Component {
       fontWeight: 'bold',
     },
   };
+
+  // renderStart = () => {
+  //   return (
+  //     <View >
+  //     <Icon name="star" size={20} color="yellow" />
+  //     <Icon name="star" size={20} color="yellow" />
+  //     <Icon name="star" size={20} color="yellow" />
+  //     <Icon name="star" size={20} color="yellow" />
+  //     </View>
+  //   );
+  // };
+  
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('dados');
@@ -276,37 +314,35 @@ class Informacao extends Component {
           </View>
           <View style={stylesInformacao.header}>
             <Image
-              source={{ uri: item.foto }}
+              source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW31R1zgG2sZbXIkWAyJPoX3udunpKPXxmeGm6Q8IURIkxa9R1uw&s" }}
               style={{
                 width: (Dimensions.get('window').width * 4) / 10,
                 height: (Dimensions.get('window').height * 2) / 10,
               }}
             />
             <View style={stylesInformacao.headerContent}>
-              <Text style={{ color: 'white', fontSize: 20 }}>{item.titulo}</Text>
+              <Text style={{ color: 'white', fontSize: 20 }}>{item.nome}</Text>
               <Text style={{ color: 'white', fontSize: 15 }}>
-                Saída: {item.Saída}
+                Saída: {item.data}
               </Text>
               <Text style={{ color: 'white', fontSize: 15 }}>
-                Duração: {item.Duração}
+                Duração: {item.duracao}
               </Text>
               <View style={stylesInformacao.avaliacao}>
-                <Icon name="star" size={20} color="yellow" />
-                <Icon name="star" size={20} color="yellow" />
-                <Icon name="star" size={20} color="yellow" />
-                <Icon name="star" size={20} color="yellow" />
-                <Icon name="star" size={20} color="yellow" />
+              <Text style={{ color: 'white', fontSize: 15 }}>
+                Avaliação: {item.avaliacao}
+              </Text>
               </View>
             </View>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Descrição</Text>
-            <Text style={stylesInformacao.texto}>{item.description}</Text>
+            <Text style={stylesInformacao.texto}>{item.descricao}</Text>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Local de Saída</Text>
             <Text style={stylesInformacao.texto}>
-              {item.localDeSaida}, {item.cidade}
+              {item.saida}, {item.cidade}
             </Text>
           </View>
           <View style={stylesInformacao.divisoria}>
@@ -471,7 +507,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   }, containerTextoTitulo: {
-    flex: 0.15,
+    flex: 0.10,
     justifyContent: 'flex-end',
     alignItems: 'flex-end', paddingBottom: 15
   },
