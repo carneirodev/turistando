@@ -58,6 +58,7 @@ export default class SignInScreen extends React.Component {
                             placeholderTextColor="rgb(87, 128, 178)"
                             placeholder={"Email"}
                             value={this.state.email}
+                            keyboardType={"email-address"}
                             onChangeText={this.handleEmailChange}>
                         </TextInput>
                     </View>

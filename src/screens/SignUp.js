@@ -6,10 +6,12 @@ import {
     StyleSheet,
     Dimensions,
     Picker,
-    Text
+    Text,
+    Alert
 } from 'react-native'
 import { Button, Icon } from "react-native-elements"
 import { ScrollView } from 'react-native-gesture-handler';
+import api from '../../api';
 
 export default class SignUp extends React.Component {
     static navigationOptions = {
@@ -17,7 +19,8 @@ export default class SignUp extends React.Component {
     };
 
     state = {
-        username: '', password: '', email: '', phone_number: ''
+        name: '', lastName: '', email: '', password: '', telefone: '', bairro: '', cidade: '',
+        personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '', bio: ''
     }
 
     onChangeText = (key, val) => {
@@ -25,16 +28,37 @@ export default class SignUp extends React.Component {
     }
 
     signUp = async () => {
-        const { username, password, email, phone_number } = this.state
-        try {
-            // here place your signup logic///////////////
+        if (this.state.email.length === 0 || this.state.password.length === 0
+            || this.state.name.length === 0 || this.state.lastName.length === 0
+            || this.state.telefone.length === 0 || this.state.bairro.length === 0
+            || this.state.cidade.length === 0 || this.state.idade.length === 0) {
+            this.setState({ error: 'Preencha todos os dados de cadastro para continuar!' }, () => false);
+            Alert.alert('Erro', 'Preencha todos os dados de cadastro para continuar!');
+        } else {
+            try {
+                const response = await api.post('/register', {
+                    name: this.state.name,
+                    lastName: this.state.lastName,
+                    email: this.state.email,
+                    password: this.state.password,
+                    telefone: this.state.telefone,
+                    bairro: this.state.bairro,
+                    cidade: this.state.cidade,
+                    personalidade: this.state.personalidade,
+                    tipo: this.state.tipo,
+                    hotel: this.state.hotel,
+                    disp: this.state.avaliacao,
+                    avaliacao: this.state.avaliacao,
+                    idade: this.state.idade,
+                    bio: this.state.bio
+                });
 
-            /////////////////////////////
-            await AsyncStorage.setItem('userToken', 'abc');
-            this.props.navigation.navigate('App');
-            console.log('user successfully signed up!: ', success)
-        } catch (err) {
-            console.log('error signing up: ', err)
+                this.props.navigation.navigate('App');
+            } catch (_err) {
+                this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
+                Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');
+                console.log(_err);
+            }
         }
     }
 
@@ -47,7 +71,27 @@ export default class SignUp extends React.Component {
                         placeholder='Nome'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.name}
+                        textContentType={"name"}
                         onChangeText={val => this.onChangeText('name', val)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Sobrenome'
+                        autoCapitalize="none"
+                        placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.lastName}
+                        textContentType={"familyName"}
+                        onChangeText={val => this.onChangeText('lastName', val)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Email'
+                        autoCapitalize="none"
+                        placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.email}
+                        keyboardType={"email-address"}
+                        onChangeText={val => this.onChangeText('email', val)}
                     />
                     <TextInput
                         style={styles.input}
@@ -55,20 +99,17 @@ export default class SignUp extends React.Component {
                         secureTextEntry={true}
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.password}
                         onChangeText={val => this.onChangeText('password', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Email'
-                        autoCapitalize="none"
-                        placeholderTextColor="rgb(87, 128, 178)"
-                        onChangeText={val => this.onChangeText('email', val)}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder='Telefone(Formato: 021-999999999)'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.telefone}
+                        keyboardType={"phone-pad"}
+                        maxLength={15}
                         onChangeText={val => this.onChangeText('telefone', val)}
                     />
                     <TextInput
@@ -76,6 +117,7 @@ export default class SignUp extends React.Component {
                         placeholder='Idade'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.idade}
                         onChangeText={val => this.onChangeText('idade', val)}
                     />
                     <TextInput
@@ -83,13 +125,7 @@ export default class SignUp extends React.Component {
                         placeholder='Bairro'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
-                        onChangeText={val => this.onChangeText('bairro', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Bairro'
-                        autoCapitalize="none"
-                        placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.bairro}
                         onChangeText={val => this.onChangeText('bairro', val)}
                     />
                     <TextInput
@@ -97,33 +133,34 @@ export default class SignUp extends React.Component {
                         placeholder='Cidade'
                         autoCapitalize="none"
                         placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.cidade}
                         onChangeText={val => this.onChangeText('cidade', val)}
                     />
                     <View style={styles.containerPicker}>
                         <Text style={styles.texto}>Qual seu jeito?</Text>
                         <Picker
-                            selectedValue={this.state.language}
+                            selectedValue={this.state.personalidade}
                             style={styles.pickerEstilo}
                             pickerStyleType={styles.input}
                             onValueChange={(itemValue, itemIndex) =>
-                                this.setState({ language: itemValue })
+                                this.setState({ personalidade: itemValue })
                             }>
                             <Picker.Item label="Aventureiro!" value="aventureiro" />
                             <Picker.Item label="Cultural!" value="cultural" />
-                            <Picker.Item itemStyle={styles.texto} label="Baladeiro!" value="baladeiro" />
+                            <Picker.Item label="Baladeiro!" value="baladeiro" />
                             <Picker.Item label="Tradicional!" value="tradicional" />
                         </Picker>
                     </View>
                     <View style={styles.containerPicker}>
                         <Text style={styles.texto}>QUEM VOCÊ QUER SER?</Text>
                         <Picker
-                            selectedValue={this.state.language}
+                            selectedValue={this.state.tipo}
                             style={styles.pickerEstilo}
                             pickerStyleType={styles.input}
                             onValueChange={(itemValue, itemIndex) =>
-                                this.setState({ language: itemValue })
+                                this.setState({ tipo: itemValue })
                             }>
-                            <Picker.Item itemStyle={styles.texto} label="Quero ser turista!" value="turista" />
+                            <Picker.Item label="Quero ser turista!" value="turista" />
                             <Picker.Item label="Quero ser líder de Rota!" value="lider" />
                         </Picker>
                     </View>
@@ -135,7 +172,8 @@ export default class SignUp extends React.Component {
                             placeholder='POUSADA/HOSTEL'
                             autoCapitalize="none"
                             placeholderTextColor="rgb(87, 128, 178)"
-                            onChangeText={val => this.onChangeText('pousadaHostel', val)}
+                            value={this.state.hotel}
+                            onChangeText={val => this.onChangeText('hotel', val)}
                         />
                     </View>
                     <View style={styles.containerPicker}>
@@ -147,7 +185,8 @@ export default class SignUp extends React.Component {
                             placeholder='Dias disponíveis'
                             autoCapitalize="none"
                             placeholderTextColor="rgb(87, 128, 178)"
-                            onChangeText={val => this.onChangeText('diasDisponiveis', val)}
+                            value={this.state.disp}
+                            onChangeText={val => this.onChangeText('disp', val)}
                         />
                     </View>
                     <Button
