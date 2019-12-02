@@ -84,9 +84,6 @@ export default class EditarDados extends Component {
                 console.log("token")
                 console.log(token)
                 const response = await api.put(link, {
-                    headers: {
-                        'Authorization': `Bearer ${response.data.token}`
-                    },
                     name: this.state.name,
                     lastName: this.state.lastName,
                     email: this.state.email,

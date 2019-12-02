@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
     try {
-        const token = await AsyncStorage.getItem('@AirBnbApp:token');
+        const token = await AsyncStorage.getItem('@turistando2:token');
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
