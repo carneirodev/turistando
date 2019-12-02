@@ -279,8 +279,8 @@ export default class IuguScreen extends Component {
   // `;
  
 render(){
-  let aux="all"
-  let url='https://pdv69ygvgc.execute-api.us-east-1.amazonaws.com/production/localize?target='
+  let aux="description=asdasda&valor=70"
+  let url='https://pagamento.appturistando.com/?'
   let urloficial= url.concat(aux)
     return (
 

@@ -74,91 +74,14 @@ class MainScreen extends Component {
       loading: false,
     });
     this.arrayholder = response;
+    
+  console.log("data pesquisa:")
   console.log(response.data)
   }catch(response){
     console.log("Erro:"+response)
   }
 
 
-      // await api.get('/rotas')
-      // .then(response => {
-      //   this.setState({ data: response.data });
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
-    // const url = [
-    //   {
-    //     Id: 1,
-    //     valor: '55,00',
-    //     localDeSaida: 'Avenida 3, 350 - Centro',
-    //     cidade: 'Poços de caldas',
-    //     titulo: 'Igrejas Históricas',
-    //     Saída: '11/11 - 14:00',
-    //     Duração: '3 Horas',
-    //     Vaga: '2 Vagas',
-    //     description:
-    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
-    //     foto:
-    //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
-    //   },
-    //   {
-    //     Id: 2,
-    //     valor: '80,00',
-    //     localDeSaida: 'Avenida Joao Pinheiro, 340 - Centro',
-    //     cidade: 'Poços de caldas',
-    //     titulo: '#Partiu Praias',
-    //     Saída: '11/11 - 10:00',
-    //     Duração: '5 Horas',
-    //     Vaga: '2 Vagas',
-    //     description:
-    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela pela praia.',
-    //     foto:
-    //       'https://www.viajali.com.br/wp-content/uploads/2018/01/praia-do-gunga-1-730x730.jpg',
-    //   },
-    //   {
-    //     Id: 3,
-    //     valor: '55,00',
-    //     localDeSaida: 'Avenida 1, 330 - Centro',
-    //     cidade: 'Poços de caldas',
-    //     titulo: 'Igrejas Históricas',
-    //     Saída: '11/11 - 16:00',
-    //     Duração: '3 Horas',
-    //     Vaga: '6 Vagas',
-    //     description:
-    //       'Serão visitadas suas cachoeiras da região em um passeio imersivo que tem como objetivo conectar o turista à natureza em uma trilha calma e bela.',
-    //     foto:
-    //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8KCTe4B1W_XnGo0x_9bnWUXAaWGaX58cnI_iNkbZu-64u4MKinA&s.jpg',
-    //   },
-    //   {
-    //     Id: 4,
-    //     valor: '50,00',
-    //     localDeSaida: 'Avenida 1, 310 - Centro',
-    //     cidade: 'São Paulo',
-    //     titulo: 'Passeio Turistico',
-    //     Saída: '12/11 - 16:00',
-    //     Duração: '3 Horas',
-    //     Vaga: '5 Vagas',
-    //     description:
-    //       'Serão visitadas monumentos da região em um passeio imersivo para o turista conhecer a história da maior cidade do Brasil .',
-    //     foto:
-    //       'https://media-cdn.tripadvisor.com/media/photo-s/18/99/d8/ed/paulista.jpg',
-    //   },
-    //   {
-    //     Id: 5,
-    //     valor: '75,00',
-    //     localDeSaida: 'Avenida 1, 80 - Centro',
-    //     cidade: 'Rio de Janeiro',
-    //     titulo: 'Copa cabana',
-    //     Saída: '11/11 - 16:00',
-    //     Duração: '3 Horas',
-    //     Vaga: '6 Vagas',
-    //     description:
-    //       'Serão visitadas monumentos da região em um passeio maravilhoso pelo Rio de Janeiro.',
-    //     foto:
-    //       'https://upload.wikimedia.org/wikipedia/commons/6/62/Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg',
-    //   },
-    // ]; //URL da API  do JSON com as informações
  
   };
 
@@ -284,24 +207,57 @@ class MainScreen extends Component {
 }
 
 class Informacao extends Component {
-  static navigationOptions = {
-    title: 'Informações',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+  
+  constructor(props) {
+    super(props);
+    global.cont = 0;
+    global.aux = [];
+
+    this.state = {
+      loading: false,
+      data: [],
+      error: null,
+      selecionado: [],
+      dialogVisible: false,
+      quantidadeItem: 0,
+    };
+   
+    this.arrayholder = [];
+  }
+  //Comentado até o backend estar pronto
+  componentDidMount() {
+    this.makeRemoteRequest();
+  }
+
+  makeRemoteRequest = async() => {
+   try{
+    const { navigation } = this.props;
+    const item = navigation.getParam('dados');
+    console.log(item.user_email)
+    const token = await AsyncStorage.getItem('@turistando2:token')
+    let link='/showUserByEmail/'+item.user_email
+    const response = await api.get(link,{
+      headers:{
+       'Authorization': `Bearer ${token}`
+      }
+    });
+    this.setState({ loading: true });
+
+    this.setState({
+      data: response.data,
+      loading: false,
+    });
+    this.arrayholder = response;
+    console.log("info:")
+  console.log(response.data)
+  }catch(response){
+    console.log("Erro info:"+response)
+  }
+
+
+ 
   };
 
-  // renderStart = () => {
-  //   return (
-  //     <View >
-  //     <Icon name="star" size={20} color="yellow" />
-  //     <Icon name="star" size={20} color="yellow" />
-  //     <Icon name="star" size={20} color="yellow" />
-  //     <Icon name="star" size={20} color="yellow" />
-  //     </View>
-  //   );
-  // };
-  
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('dados');
@@ -310,7 +266,12 @@ class Informacao extends Component {
         <View style={stylesInformacao.container}>
           <View style={stylesInformacao.cabecalho}>
             <Icon name="room" size={30} color="#F2E3BC" />
-            <Text style={{ color: '#F2E3BC', fontSize: 25 }}>Próxima Rota</Text>
+            <Text style={{ color: '#F2E3BC', fontSize: 25,flex:4 }}>Próxima Rota</Text>
+            <Button
+            buttonStyle = {styles.botaoFechar}
+            onPress={() => this.props.navigation.goBack()}
+            title={<Text style={{ color: 'white' }}>Voltar</Text>}>
+          </Button>
           </View>
           <View style={stylesInformacao.header}>
             <Image
@@ -345,18 +306,18 @@ class Informacao extends Component {
               {item.saida}, {item.cidade}
             </Text>
           </View>
-          <View style={stylesInformacao.divisoria}>
+          {/* <View style={stylesInformacao.divisoria}>
             <Text style={{ textDecorationLine: 'underline', color: 'white' }}>
               Google Maps - Waze
             </Text>
-          </View>
+          </View> */}
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Valor</Text>
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
             <Button
             buttonStyle = {styles.botaoLogin}
-            onPress={() => this.props.navigation.navigate('Pagamento')}
-            title={<Text style={{ color: 'white' }}>Pagar</Text>}>
+            // onPress={() => this.props.navigation.navigate('Pagamento')}
+            title={<Text style={{ color: 'white' }}>Pagar (Em breve)</Text>}>
           </Button>
           </View>
           <View style={stylesInformacao.divisoria}>
@@ -375,21 +336,23 @@ class Informacao extends Component {
               />
               <View style={stylesInformacao.liderContent}>
                 <Text style={{ color: 'white', fontSize: 20 }}>
-                  Juliana Veríssimo
+                  {this.state.data.name}
                 </Text>
                 <Text style={{ color: 'white', fontSize: 20 }}>
-                  43 Rotas Concluidas
+                {this.state.data.idade} anos
+                </Text>
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                {this.state.data.personalidade} 
                 </Text>
               </View>
             </View>
           </View>
           <View style={stylesInformacao.divisoria}>
-            <Button
-              buttonStyle={stylesInformacao.botaoCancelar}
-              title={<Text style={{ color: 'red' }}>FECHAR</Text>}
-              icon={<Icon name="clear" size={20} color="red" />}
-              onPress={() => this.props.navigation.goBack()}
-            />
+          <Button
+            buttonStyle = {styles.botaoLogin}
+            onPress={() => this.props.navigation.goBack()}
+            title={<Text style={{ color: 'white' }}>Voltar</Text>}>
+          </Button>
           </View>
         </View>
       </ScrollView>
@@ -548,6 +511,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: (Dimensions.get('window').width) * 8 / 10,
     margin: 15
+  },botaoFechar:{
+    flex:1,
+    alignItems: 'flex-end',
+    backgroundColor: "rgb(87, 128, 178)",
+    borderRadius: 20,
+    width: (Dimensions.get('window').width) * 2 / 10,
+     justifyContent: 'center'
   }
 });
 
