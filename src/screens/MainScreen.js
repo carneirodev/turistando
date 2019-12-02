@@ -316,8 +316,8 @@ class Informacao extends Component {
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
             <Button
             buttonStyle = {styles.botaoLogin}
-            // onPress={() => this.props.navigation.navigate('Pagamento')}
-            title={<Text style={{ color: 'white' }}>Pagar (Em breve)</Text>}>
+           // onPress={() => this.props.navigation.navigate('Pagamento')}
+            title={<Text style={{ color: 'white' }}>Pagar </Text>}>
           </Button>
           </View>
           <View style={stylesInformacao.divisoria}>
