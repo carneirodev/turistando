@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
-  Keyboard, ImageBackground,AsyncStorage
+  Keyboard, ImageBackground, AsyncStorage
 } from 'react-native';
 import {
   Image,
@@ -59,30 +59,30 @@ class MainScreen extends Component {
     this.makeRemoteRequest();
   }
 
-  makeRemoteRequest = async() => {
-   try{
-    const token = await AsyncStorage.getItem('@turistando2:token')
-    const response = await api.get('/rotas',{
-      headers:{
-       'Authorization': `Bearer ${token}`
-      }
-    });
-    this.setState({ loading: true });
+  makeRemoteRequest = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@turistando2:token')
+      const response = await api.get('/rotas', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      this.setState({ loading: true });
 
-    this.setState({
-      data: response.data,
-      loading: false,
-    });
-    this.arrayholder = response;
-    
-  console.log("data pesquisa:")
-  console.log(response.data)
-  }catch(response){
-    console.log("Erro:"+response)
-  }
+      this.setState({
+        data: response.data,
+        loading: false,
+      });
+      this.arrayholder = response;
+
+      console.log("data pesquisa:")
+      console.log(response.data)
+    } catch (response) {
+      console.log("Erro:" + response)
+    }
 
 
- 
+
   };
 
   renderSeparator = () => {
@@ -121,7 +121,7 @@ class MainScreen extends Component {
     //const itemId = navigation.getParam('dados');
     this.props.navigation.navigate('Modal', { dados: item }); //Próxima rota
   }
-  
+
   render() {
     if (this.state.loading) {
       return (
@@ -130,7 +130,7 @@ class MainScreen extends Component {
         </View>
       );
     }
-    console.log("data"+this.data)
+    console.log("data" + this.data)
     return (
       <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
         <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
@@ -142,7 +142,7 @@ class MainScreen extends Component {
             autoCorrect={false}
 
             value={this.state.value}
-          /><View  style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
+          /><View style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
             name="ios-search"
             size={30}
             style={{ alignItems: "flex-end" }}
@@ -207,7 +207,7 @@ class MainScreen extends Component {
 }
 
 class Informacao extends Component {
-  
+
   constructor(props) {
     super(props);
     global.cont = 0;
@@ -221,7 +221,7 @@ class Informacao extends Component {
       dialogVisible: false,
       quantidadeItem: 0,
     };
-   
+
     this.arrayholder = [];
   }
   //Comentado até o backend estar pronto
@@ -229,33 +229,33 @@ class Informacao extends Component {
     this.makeRemoteRequest();
   }
 
-  makeRemoteRequest = async() => {
-   try{
-    const { navigation } = this.props;
-    const item = navigation.getParam('dados');
-    console.log(item.user_email)
-    const token = await AsyncStorage.getItem('@turistando2:token')
-    let link='/showUserByEmail/'+item.user_email
-    const response = await api.get(link,{
-      headers:{
-       'Authorization': `Bearer ${token}`
-      }
-    });
-    this.setState({ loading: true });
+  makeRemoteRequest = async () => {
+    try {
+      const { navigation } = this.props;
+      const item = navigation.getParam('dados');
+      console.log(item.user_email)
+      const token = await AsyncStorage.getItem('@turistando2:token')
+      let link = '/showUserByEmail/' + item.user_email
+      const response = await api.get(link, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      this.setState({ loading: true });
 
-    this.setState({
-      data: response.data,
-      loading: false,
-    });
-    this.arrayholder = response;
-    console.log("info:")
-  console.log(response.data)
-  }catch(response){
-    console.log("Erro info:"+response)
-  }
+      this.setState({
+        data: response.data,
+        loading: false,
+      });
+      this.arrayholder = response;
+      console.log("info:")
+      console.log(response.data)
+    } catch (response) {
+      console.log("Erro info:" + response)
+    }
 
 
- 
+
   };
 
   render() {
@@ -266,12 +266,12 @@ class Informacao extends Component {
         <View style={stylesInformacao.container}>
           <View style={stylesInformacao.cabecalho}>
             <Icon name="room" size={30} color="#F2E3BC" />
-            <Text style={{ color: '#F2E3BC', fontSize: 25,flex:4 }}>Próxima Rota</Text>
+            <Text style={{ color: '#F2E3BC', fontSize: 25, flex: 4 }}>Próxima Rota</Text>
             <Button
-            buttonStyle = {styles.botaoFechar}
-            onPress={() => this.props.navigation.goBack()}
-            title={<Text style={{ color: 'white' }}>Voltar</Text>}>
-          </Button>
+              buttonStyle={styles.botaoFechar}
+              onPress={() => this.props.navigation.goBack()}
+              title={<Text style={{ color: 'white' }}>Voltar</Text>}>
+            </Button>
           </View>
           <View style={stylesInformacao.header}>
             <Image
@@ -290,9 +290,9 @@ class Informacao extends Component {
                 Duração: {item.duracao}
               </Text>
               <View style={stylesInformacao.avaliacao}>
-              <Text style={{ color: 'white', fontSize: 15 }}>
-                Avaliação: {item.avaliacao}
-              </Text>
+                <Text style={{ color: 'white', fontSize: 15 }}>
+                  Avaliação: {item.avaliacao}
+                </Text>
               </View>
             </View>
           </View>
@@ -315,10 +315,10 @@ class Informacao extends Component {
             <Text style={stylesInformacao.titulo}>Valor</Text>
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
             <Button
-            buttonStyle = {styles.botaoLogin}
-           // onPress={() => this.props.navigation.navigate('Pagamento')}
-            title={<Text style={{ color: 'white' }}>Pagar </Text>}>
-          </Button>
+              buttonStyle={styles.botaoLogin}
+              // onPress={() => this.props.navigation.navigate('Pagamento')}
+              title={<Text style={{ color: 'white' }}>Pagar </Text>}>
+            </Button>
           </View>
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Líder de Rota</Text>
@@ -339,20 +339,20 @@ class Informacao extends Component {
                   {this.state.data.name}
                 </Text>
                 <Text style={{ color: 'white', fontSize: 20 }}>
-                {this.state.data.idade} anos
+                  {this.state.data.idade} anos
                 </Text>
                 <Text style={{ color: 'white', fontSize: 20 }}>
-                {this.state.data.personalidade} 
+                  {this.state.data.personalidade}
                 </Text>
               </View>
             </View>
           </View>
           <View style={stylesInformacao.divisoria}>
-          <Button
-            buttonStyle = {styles.botaoLogin}
-            onPress={() => this.props.navigation.goBack()}
-            title={<Text style={{ color: 'white' }}>Voltar</Text>}>
-          </Button>
+            <Button
+              buttonStyle={styles.botaoLogin}
+              onPress={() => this.props.navigation.goBack()}
+              title={<Text style={{ color: 'white' }}>Voltar</Text>}>
+            </Button>
           </View>
         </View>
       </ScrollView>
@@ -406,18 +406,18 @@ class LiderScreen extends Component {
             flex: 14,
             justifyContent: 'center',
             alignItems: 'center',
-            
+
           }}>
           <Button
-            buttonStyle = {styles.botaoLogin}
+            buttonStyle={styles.botaoLogin}
             onPress={() => this.props.navigation.navigate('CriarRota')}
             title={<Text style={{ color: 'white' }}>Criar Rota</Text>}>
           </Button>
           <Button
-            buttonStyle = {styles.botaoLogin}
+            buttonStyle={styles.botaoLogin}
             onPress={() => this.props.navigation.navigate('EditarRotaScreen')}
             title={<Text style={{ color: 'white' }}>Editar Rota</Text>}>
-              </Button>
+          </Button>
           {/* 
           <Button
             buttonStyle = {styles.botaoLogin}
@@ -505,19 +505,19 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     borderRadius: 10,
   },
-  botaoLogin:{
+  botaoLogin: {
     alignItems: 'center',
     backgroundColor: "rgb(87, 128, 178)",
     borderRadius: 20,
     width: (Dimensions.get('window').width) * 8 / 10,
     margin: 15
-  },botaoFechar:{
-    flex:1,
+  }, botaoFechar: {
+    flex: 1,
     alignItems: 'flex-end',
     backgroundColor: "rgb(87, 128, 178)",
     borderRadius: 20,
     width: (Dimensions.get('window').width) * 2 / 10,
-     justifyContent: 'center'
+    justifyContent: 'center'
   }
 });
 

@@ -26,7 +26,7 @@ export default class SignInScreen extends React.Component {
         header: null,
     };
 
-    state = { email: '', password: '', error: '' };
+    state = { loading: false, email: '', password: '', error: '' };
 
     handleEmailChange = (email) => {
         this.setState({ email });
@@ -37,6 +37,13 @@ export default class SignInScreen extends React.Component {
     };
 
     render() {
+        if (this.state.loading) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator />
+                </View>
+            );
+        }
         return (
             <ScrollView style={styles.container}>
 
@@ -103,6 +110,7 @@ export default class SignInScreen extends React.Component {
         await AsyncStorage.setItem('userToken', 'abc');
         this.props.navigation.navigate('App');
         */
+        this.state.loading = true;
         if (this.state.email.length === 0 || this.state.password.length === 0) {
             this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
             Alert.alert('Erro', 'Preencha usuário e senha para continuar!');
@@ -142,6 +150,7 @@ export default class SignInScreen extends React.Component {
                 console.log(_err);
             }
         }
+        this.state.loading = false;
     };
 
     _signUp = async () => {

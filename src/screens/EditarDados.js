@@ -101,8 +101,8 @@ export default class EditarDados extends Component {
 
                 this.props.navigation.goBack();
             } catch (_err) {
-                this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
-                Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');
+                this.setState({ error: 'Houve um problema ao atualizar, verifique suas credenciais!' });
+                Alert.alert('Erro', 'Houve um problema ao atualizar, verifique suas credenciais!');
                 console.log(_err);
             }
         }

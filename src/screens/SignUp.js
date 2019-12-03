@@ -7,7 +7,8 @@ import {
     Dimensions,
     Picker,
     Text,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native'
 import { Button, Icon } from "react-native-elements"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,6 +20,7 @@ export default class SignUp extends React.Component {
     };
 
     state = {
+        loading: false,
         name: '', lastName: '', email: '', password: '', telefone: '', bairro: '', cidade: '',
         personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '',
         bio: 'Adicione uma bio para que possam te conhecer melhor! Basta clicar em Editar Perfil!'
@@ -29,6 +31,7 @@ export default class SignUp extends React.Component {
     }
 
     signUp = async () => {
+        this.state.loading = true;
         if (this.state.email.length === 0 || this.state.password.length === 0
             || this.state.name.length === 0 || this.state.lastName.length === 0
             || this.state.telefone.length === 0 || this.state.bairro.length === 0
@@ -76,13 +79,22 @@ export default class SignUp extends React.Component {
 
             } catch (_err) {
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
-                Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');
+                Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!(Seu email pode ja ter sido cadastrado)');
                 console.log(_err);
             }
         }
+        this.state.loading = false;
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text>Cadastrando</Text>
+                    <ActivityIndicator />
+                </View>
+            );
+        }
         return (
             <ScrollView>
                 <View style={styles.container}>
