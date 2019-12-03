@@ -78,6 +78,7 @@ export default class SignUp extends React.Component {
                 this.props.navigation.navigate('App');
 
             } catch (_err) {
+                this.state.loading = false;
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!(Seu email pode ja ter sido cadastrado)');
                 console.log(_err);
