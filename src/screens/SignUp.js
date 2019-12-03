@@ -20,7 +20,7 @@ export default class SignUp extends React.Component {
 
     state = {
         name: '', lastName: '', email: '', password: '', telefone: '', bairro: '', cidade: '',
-        personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '', 
+        personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '',
         bio: 'Adicione uma bio para que possam te conhecer melhor! Basta clicar em Editar Perfil!'
     }
 
@@ -37,7 +37,7 @@ export default class SignUp extends React.Component {
             Alert.alert('Erro', 'Preencha todos os dados de cadastro para continuar!');
         } else {
             try {
-                const response = await api.post('/register', {
+                const resposta = await api.post('/register', {
                     name: this.state.name,
                     lastName: this.state.lastName,
                     email: this.state.email,
@@ -54,7 +54,26 @@ export default class SignUp extends React.Component {
                     bio: this.state.bio
                 });
 
-                this.props.navigation.navigate('Auth');
+                const response = await api.post('/authenticate', {
+                    email: this.state.email,
+                    password: this.state.password,
+                });
+
+
+                let link = '/showUserByEmail/' + this.state.email
+                const response2 = await api.get(link, {
+                    headers: {
+                        'Authorization': `Bearer ${response.data.token}`
+                    }
+                });
+                const tipo = response2.data.tipo
+
+                await AsyncStorage.multiSet([['@turistando2:token', response.data.token],
+                ['@turistando2:userEmail', this.state.email],
+                ['@turistando2:userTipo', tipo]])
+
+                this.props.navigation.navigate('App');
+
             } catch (_err) {
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!');
