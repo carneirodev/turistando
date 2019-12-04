@@ -26,7 +26,7 @@ import {
 import IOSIcon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import IuguScreen from './Pagamento'
+import Pagamento from './Pagamento'
 import HistoricoScreen from './HistoricoScreen'
 import CriarRotaScreen from './CriarRotaScreen';
 import EditarRotaScreen from './EditarRotaScreen';
@@ -316,7 +316,7 @@ class Informacao extends Component {
             <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
             <Button
               buttonStyle={styles.botaoLogin}
-              // onPress={() => this.props.navigation.navigate('Pagamento')}
+              onPress={() => this.props.navigation.navigate('Pagamento',{ dados: item ,nome:this.state.data.name})}
               title={<Text style={{ color: 'white' }}>Pagar </Text>}>
             </Button>
           </View>
@@ -577,7 +577,7 @@ const RootStack = createStackNavigator(
     CriarRota: CriarRotaScreen,
     EditarRotaScreen: EditarRotaScreen,
     EditarDados: EditarDados,
-    Pagamento: IuguScreen,
+    Pagamento: Pagamento,
   },
   {
     initialRouteName: 'Home',
