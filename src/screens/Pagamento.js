@@ -270,14 +270,9 @@ export default class Pagamento extends Component {
                 placeholderTextColor="rgb(87, 128, 178)"
                 keyboardType={'number-pad'}
                 value={this.state.verification_value}
-<<<<<<< Updated upstream
-                onChangeText={val =>
-                  this.onChangeText('verification_value', val)
-                }
-=======
                 maxLength={3}
                 onChangeText={val => this.onChangeText('verification_value', val)}
->>>>>>> Stashed changes
+
               />
               <TextInput
                 style={styles.input}
