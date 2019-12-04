@@ -73,11 +73,11 @@ class SideMenu extends Component {
 					</View>
 
 
-					<View>
+					{/* <View>
 						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Historico')}>
 							Histórico
             			</Text>
-					</View>
+					</View> */}
 
 
 

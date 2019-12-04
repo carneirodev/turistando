@@ -98,11 +98,12 @@ class MainScreen extends Component {
   };
   //Ainda não funcional
   searchFilterFunction = text => {
+    console.log(text)
     this.setState({
       value: text,
     });
 
-    const newData = this.arrayholder.filter(item => {
+    const newData = this.arrayholder.filter(item => {console.log(item.cidade)
       const itemData = `${item.cidade.toUpperCase()} `;
       const textData = text.toUpperCase();
 
@@ -113,6 +114,22 @@ class MainScreen extends Component {
     });
   };
 
+  
+	renderHeader = () => {
+	  return (
+      <View style={styles.searchSection}><TextInput
+      placeholder="Pesquise uma cidade"
+      
+     onChangeText={text => this.searchFilterFunction(text)}
+		  autoCorrect={false}
+		  value={this.state.value}
+    /><View style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
+      name="ios-search"
+      size={30}
+      style={{ alignItems: "flex-end" }}
+    /></View></View>
+	  );
+	};
 
 
   submit(item) {
@@ -133,20 +150,8 @@ class MainScreen extends Component {
     console.log("data" + this.data)
     return (
       <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
-        <View style={{ flex: 1, backgroundColor: '#e6e6e699' }}>
-          <View style={styles.searchSection}><TextInput
-            placeholder="Pesquise uma cidade"
-
-
-            onChangeText={text => this.searchFilterFunction(text)}
-            autoCorrect={false}
-
-            value={this.state.value}
-          /><View style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingLeft: (Dimensions.get('window').width * 3) / 10 }}><IOSIcon
-            name="ios-search"
-            size={30}
-            style={{ alignItems: "flex-end" }}
-          /></View></View>
+        <View style={{ flex: 1, backgroundColor: '#e6e6e699', marginTop:15 }}>
+          
           <View style={{ flex: 10, justifyContent: "center", alignItems: "center" }} >
             <FlatList
               data={this.state.data}
@@ -197,7 +202,7 @@ class MainScreen extends Component {
                 </TouchableHighlight>
               )}
               ItemSeparatorComponent={this.renderSeparator}
-
+              //ListHeaderComponent={this.renderHeader}
             />
           </View>
 

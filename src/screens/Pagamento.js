@@ -38,7 +38,7 @@ export default class Pagamento extends Component {
       disp: '',
       avaliacao: '',
       idade: '',
-      item:[],
+      item: [],
       account_id: 'E172C75395B44C808CFC02D80F6B9506',
       method: 'credit_card',
       test: 'false',
@@ -48,17 +48,17 @@ export default class Pagamento extends Component {
       last_name: '',
       month: '',
       year: '',
-      token:''
+      token: '',
     };
   }
 
   componentDidMount = async () => {
     const email = await AsyncStorage.getItem('@turistando2:userEmail');
     const token = await AsyncStorage.getItem('@turistando2:token');
-    const { navigation } = this.props;
-    const aux=navigation.getParam('dados')
-    const aux2=navigation.getParam('nome')
-    console.log("dado da outra pagina"+aux.valor)
+    const {navigation} = this.props;
+    const aux = navigation.getParam('dados');
+    const aux2 = navigation.getParam('nome');
+    console.log('dado da outra pagina' + aux.valor);
     let link = '/showUserByEmail/' + email;
     const usuario = await api.get(link, {
       headers: {
@@ -80,7 +80,9 @@ export default class Pagamento extends Component {
       avaliacao: usuario.data.avaliacao,
       idade: usuario.data.idade,
       bio: usuario.data.bio,
-      loading: false,item:aux,nomeLider:aux2,
+      loading: false,
+      item: aux,
+      nomeLider: aux2,
     });
   };
 
@@ -97,17 +99,17 @@ export default class Pagamento extends Component {
     //     Alert.alert('Erro', 'Preencha todos os dados de usuário!');
     // } else {
     try {
-        // console.log(this.state);
-        // console.log(this.state.account_id);
-        //     console.log(this.state.method);
-        //         console.log(this.state.number);
-                
-        //         console.log(this.state.verification_value);
-        //         console.log(this.state.first_name);
-        //         console.log(this.state.last_name);
-        //         console.log(this.state.month);
-        //         console.log(this.state.year);
-               //console.log(this.state.test);
+      // console.log(this.state);
+      // console.log(this.state.account_id);
+      //     console.log(this.state.method);
+      //         console.log(this.state.number);
+
+      //         console.log(this.state.verification_value);
+      //         console.log(this.state.first_name);
+      //         console.log(this.state.last_name);
+      //         console.log(this.state.month);
+      //         console.log(this.state.year);
+      //console.log(this.state.test);
       const response = await apipagamento.post('/payment_token', {
         // account_id: 'E172C75395B44C808CFC02D80F6B9506',
         // method: 'credit_card',
@@ -120,21 +122,21 @@ export default class Pagamento extends Component {
         //   month: '06',
         //   year: '2020',
         // },
-        
+
         account_id: this.state.account_id,
         method: this.state.method,
         test: this.state.test,
-        data:{
-            number: this.state.number,
-            verification_value: this.state.verification_value,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            month: this.state.month,
-            year: this.state.year,
+        data: {
+          number: this.state.number,
+          verification_value: this.state.verification_value,
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          month: this.state.month,
+          year: this.state.year,
         },
       });
       //console.log("token:"+response.data.id);
-    this.state.token=response.data.id
+      this.state.token = response.data.id;
       try {
         // {
         //     "token": "4050357DFAD840DD9D0A612781AF7017",
@@ -153,33 +155,39 @@ export default class Pagamento extends Component {
         // console.log(this.state.item.descricao)
         // console.log(this.state.email)
         // console.log(this.state.name)
-        let valor=this.state.item.valor+"00"
+        let valor = this.state.item.valor + '00';
         // console.log("v:"+valor+"e")
         // if( valor.length<2){
         //      valor=valor+"00"
         //      console.log("corrigindo"+valor)
         // }
-        pagamento = await apipagamento.post('/charge?api_token=76d02e3fdfe121045380647b6105998c', {
-          token: this.state.token,
-          items: [
-            {
-              description: this.state.item.descricao+"-"+this.state.nomeLider,
-              quantity: '1',
-              price_cents: valor,
-            }],
-        payer:{
-              email: "viniciuscarneirodasilva@gmail.com",
-              name:this.state.name
-            },json: true,
-          
-        });
-        console.log("pagamento: "+pagamento)
+        pagamento = await apipagamento.post(
+          '/charge?api_token=76d02e3fdfe121045380647b6105998c',
+          {
+            token: this.state.token,
+            items: [
+              {
+                description:
+                  this.state.item.descricao + '-' + this.state.nomeLider,
+                quantity: '1',
+                price_cents: valor,
+              },
+            ],
+            payer: {
+              email: 'viniciuscarneirodasilva@gmail.com',
+              name: this.state.name,
+            },
+            json: true,
+          },
+        );
+        console.log('pagamento: ' + pagamento);
       } catch (error) {
         this.setState({
           error: '2Houve um problema com o pagamento, verifique os dados!',
         });
         Alert.alert(
-          'Verifique seu email!','Caso a confirmação de pagamento não chegar em 24 horas entre em contato!'
+          'Verifique seu email!',
+          'Caso a confirmação de pagamento não chegar em 24 horas entre em contato!',
         );
         //console.log(_err);
       }
@@ -205,7 +213,7 @@ export default class Pagamento extends Component {
         </View>
       );
     }
-    
+
     return (
       <View style={{flex: 1, backgroundColor: '#FFF'}}>
         <View
@@ -259,7 +267,9 @@ export default class Pagamento extends Component {
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.verification_value}
-                onChangeText={val => this.onChangeText('verification_value', val)}
+                onChangeText={val =>
+                  this.onChangeText('verification_value', val)
+                }
               />
               <TextInput
                 style={styles.input}
