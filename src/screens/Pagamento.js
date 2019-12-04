@@ -90,6 +90,8 @@ export default class Pagamento extends Component {
     this.setState({[key]: val});
   };
 
+  
+
   saveChanges = async () => {
     // if (this.state.first_name.length === 0
     //     || this.state.last_name.length === 0 || this.state.month.length === 0
@@ -235,7 +237,7 @@ export default class Pagamento extends Component {
             <View style={styles.container}>
               <TextInput
                 style={styles.input}
-                placeholder="Titular do cartão nome"
+                placeholder="Nome do Titular do cartão"
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.first_name}
@@ -244,7 +246,7 @@ export default class Pagamento extends Component {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Titular do cartão sobrenome"
+                placeholder="Sobrenome do Titular do cartão"
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.last_name}
@@ -266,10 +268,16 @@ export default class Pagamento extends Component {
                 placeholder="CVV"
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
+                keyboardType={'number-pad'}
                 value={this.state.verification_value}
+<<<<<<< Updated upstream
                 onChangeText={val =>
                   this.onChangeText('verification_value', val)
                 }
+=======
+                maxLength={3}
+                onChangeText={val => this.onChangeText('verification_value', val)}
+>>>>>>> Stashed changes
               />
               <TextInput
                 style={styles.input}
@@ -277,6 +285,8 @@ export default class Pagamento extends Component {
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.month}
+                keyboardType={'number-pad'}
+                maxLength={2}
                 onChangeText={val => this.onChangeText('month', val)}
               />
               <TextInput
@@ -285,6 +295,8 @@ export default class Pagamento extends Component {
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.year}
+                keyboardType={'number-pad'}
+                maxLength={2}
                 onChangeText={val => this.onChangeText('year', val)}
               />
               <Button

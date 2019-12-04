@@ -36,6 +36,7 @@ export default class SignUp extends React.Component {
             || this.state.name.length === 0 || this.state.lastName.length === 0
             || this.state.telefone.length === 0 || this.state.bairro.length === 0
             || this.state.cidade.length === 0 || this.state.idade.length === 0) {
+            this.state.loading = false;
             this.setState({ error: 'Preencha todos os dados de cadastro para continuar!' }, () => false);
             Alert.alert('Erro', 'Preencha todos os dados de cadastro para continuar!');
         } else {
@@ -75,8 +76,8 @@ export default class SignUp extends React.Component {
                 ['@turistando2:userEmail', this.state.email],
                 ['@turistando2:userTipo', tipo]])
 
+                this.state.loading = false;
                 this.props.navigation.navigate('App');
-
             } catch (_err) {
                 this.state.loading = false;
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
@@ -84,7 +85,6 @@ export default class SignUp extends React.Component {
                 console.log(_err);
             }
         }
-        this.state.loading = false;
     }
 
     render() {
