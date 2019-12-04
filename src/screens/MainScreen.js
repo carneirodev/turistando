@@ -418,11 +418,12 @@ class LiderScreen extends Component {
             onPress={() => this.props.navigation.navigate('CriarRota')}
             title={<Text style={{ color: 'white' }}>Criar Rota</Text>}>
           </Button>
-          <Button
+          {/*<Button
             buttonStyle={styles.botaoLogin}
             onPress={() => this.props.navigation.navigate('EditarRotaScreen')}
             title={<Text style={{ color: 'white' }}>Editar Rota</Text>}>
-          </Button>
+          </Button>*/}
+          
           {/* 
           <Button
             buttonStyle = {styles.botaoLogin}
