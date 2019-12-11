@@ -22,6 +22,7 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+import { MaskService } from 'react-native-masked-text'
 //<script type="text/javascript" src="https://js.iugu.com/v2"></script>
 import IOSIcon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer } from 'react-navigation';
@@ -75,8 +76,8 @@ class MainScreen extends Component {
       });
       this.arrayholder = response;
 
-      console.log("data pesquisa:")
-      console.log(response.data)
+     //console.log("data pesquisa:")
+      //data.log(response.data)
     } catch (response) {
       console.log("Erro:" + response)
     }
@@ -98,12 +99,12 @@ class MainScreen extends Component {
   };
   //Ainda não funcional
   searchFilterFunction = text => {
-    console.log(text)
+    
     this.setState({
       value: text,
     });
 
-    const newData = this.arrayholder.filter(item => {console.log(item.cidade)
+    const newData = this.arrayholder.filter(item => {
       const itemData = `${item.cidade.toUpperCase()} `;
       const textData = text.toUpperCase();
 
@@ -147,7 +148,7 @@ class MainScreen extends Component {
         </View>
       );
     }
-    console.log("data" + this.data)
+    //console.log("data" + this.data)
     return (
       <ImageBackground source={{ uri: 'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg' }} style={{ width: '100%', height: '100%' }}>
         <View style={{ flex: 1, backgroundColor: '#e6e6e699', marginTop:15 }}>
@@ -202,7 +203,7 @@ class MainScreen extends Component {
                 </TouchableHighlight>
               )}
               ItemSeparatorComponent={this.renderSeparator}
-              //ListHeaderComponent={this.renderHeader}
+              ListHeaderComponent={this.renderHeader}
             />
           </View>
 
@@ -254,7 +255,7 @@ class Informacao extends Component {
       });
       this.arrayholder = response;
       console.log("info:")
-      console.log(response.data)
+    //  console.log(response.data)
     } catch (response) {
       console.log("Erro info:" + response)
     }
@@ -266,6 +267,10 @@ class Informacao extends Component {
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('dados');
+    const preco= `${item.valor}`
+    const novo =  preco.slice(-2)
+    const valototal=preco.slice(0,2)+','+novo
+    var money = MaskService.toMask('money',valototal)
     return (
       <ScrollView>
         <View style={stylesInformacao.container}>
@@ -289,7 +294,7 @@ class Informacao extends Component {
             <View style={stylesInformacao.headerContent}>
               <Text style={{ color: 'white', fontSize: 20 }}>{item.nome}</Text>
               <Text style={{ color: 'white', fontSize: 15 }}>
-                Saída: {item.data}
+                Saída: {item.data} - {item.hora}
               </Text>
               <Text style={{ color: 'white', fontSize: 15 }}>
                 Duração: {item.duracao}
@@ -318,7 +323,7 @@ class Informacao extends Component {
           </View> */}
           <View style={stylesInformacao.divisoria}>
             <Text style={stylesInformacao.titulo}>Valor</Text>
-            <Text style={stylesInformacao.titulo}>R$ {item.valor}</Text>
+            <Text style={stylesInformacao.titulo}> {money}</Text>
             <Button
               buttonStyle={styles.botaoLogin}
               onPress={() => this.props.navigation.navigate('Pagamento',{ dados: item ,nome:this.state.data.name})}
@@ -455,7 +460,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 20,
     color: '#75b8c8',
   },
   titulo2: {

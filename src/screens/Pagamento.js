@@ -39,7 +39,7 @@ export default class Pagamento extends Component {
       avaliacao: '',
       idade: '',
       item: [],
-      account_id: 'E172C75395B44C808CFC02D80F6B9506',
+      account_id: 'D1B7E5A209C34348BC26F22BA8653A96',
       method: 'credit_card',
       test: 'false',
       number: '',
@@ -48,7 +48,7 @@ export default class Pagamento extends Component {
       last_name: '',
       month: '',
       year: '',
-      token: '',
+      token: '',valorAux:''
     };
   }
 
@@ -82,8 +82,9 @@ export default class Pagamento extends Component {
       bio: usuario.data.bio,
       loading: false,
       item: aux,
-      nomeLider: aux2,
+      nomeLider: aux2,valorAux:aux.valor+'00'
     });
+   
   };
 
   onChangeText = (key, val) => {
@@ -112,32 +113,33 @@ export default class Pagamento extends Component {
       //         console.log(this.state.month);
       //         console.log(this.state.year);
       //console.log(this.state.test);
+      console.log(this.state)
       const response = await apipagamento.post('/payment_token', {
-        // account_id: 'E172C75395B44C808CFC02D80F6B9506',
-        // method: 'credit_card',
-        // test: 'true',
-        // data: {
-        //   number: '4111111111111111',
-        //   verification_value: '123',
-        //   first_name: 'asdfasd',
-        //   last_name: 'asdf',
-        //   month: '06',
-        //   year: '2020',
-        // },
-
-        account_id: this.state.account_id,
-        method: this.state.method,
-        test: this.state.test,
+        account_id: "D1B7E5A209C34348BC26F22BA8653A96",
+        method: "credit_card",
+        test: "false",
         data: {
-          number: this.state.number,
-          verification_value: this.state.verification_value,
-          first_name: this.state.first_name,
-          last_name: this.state.last_name,
-          month: this.state.month,
-          year: this.state.year,
+          number: "5234214169147364",
+          verification_value: "640",
+          first_name: "VINICIUS",
+          last_name: "C SILVA",
+          month: "06",
+          year: "2021",
         },
+
+        // account_id: this.state.account_id,
+        // method: this.state.method,
+        // test: this.state.test,
+        // data: {
+        //   number: this.state.number,
+        //   verification_value: this.state.verification_value,
+        //   first_name: this.state.first_name,
+        //   last_name: this.state.last_name,
+        //   month: this.state.month,
+        //   year: this.state.year,
+        // },
       });
-      //console.log("token:"+response.data.id);
+      console.log("token:"+response.data.id);
       this.state.token = response.data.id;
       try {
         // {
@@ -157,22 +159,30 @@ export default class Pagamento extends Component {
         // console.log(this.state.item.descricao)
         // console.log(this.state.email)
         // console.log(this.state.name)
-        let valor = this.state.item.valor + '00';
+       
         // console.log("v:"+valor+"e")
         // if( valor.length<2){
         //      valor=valor+"00"
         //      console.log("corrigindo"+valor)
-        // }
+        // } parseInt(this.state.item.valor + "00");
+
+        // let valor =parseInt(this.state.valorAux) 
+        // console.log("valor:"+this.state.valorAux)
+       
+        // console.log("valormul:"+valor)
+        
+      //  let valor2 =valor
+
         pagamento = await apipagamento.post(
-          '/charge?api_token=76d02e3fdfe121045380647b6105998c',
+          '/charge?api_token=066de07419c9c0e9bb48e18ff31674d1',
           {
             token: this.state.token,
             items: [
               {
                 description:
                   this.state.item.descricao + '-' + this.state.nomeLider,
-                quantity: '1',
-                price_cents: valor,
+                quantity: 1,
+                price_cents:  this.state.item.valor,
               },
             ],
             payer: {
@@ -182,7 +192,9 @@ export default class Pagamento extends Component {
             json: true,
           },
         );
-        console.log('pagamento: ' + pagamento);
+          console.log("testepagamento")
+
+
       } catch (error) {
         this.setState({
           error: '2Houve um problema com o pagamento, verifique os dados!',
@@ -286,12 +298,12 @@ export default class Pagamento extends Component {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Ano do vencimento do cartão de crédito"
+                placeholder="Ano do vencimento do cartão de crédito ex:2024"
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.year}
                 keyboardType={'number-pad'}
-                maxLength={2}
+                maxLength={4}
                 onChangeText={val => this.onChangeText('year', val)}
               />
               <Button
