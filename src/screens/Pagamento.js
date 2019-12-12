@@ -16,6 +16,7 @@ import {Button} from 'react-native-elements';
 import api from '../../api';
 import apipagamento from '../../apipagamento';
 
+import {TextInputMask} from 'react-native-masked-text';
 export default class Pagamento extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +49,10 @@ export default class Pagamento extends Component {
       last_name: '',
       month: '',
       year: '',
-      token: '',valorAux:''
+      token: '',
+      valorAux:'',
+      data:'',
+      idUser:''
     };
   }
 
@@ -58,7 +62,7 @@ export default class Pagamento extends Component {
     const {navigation} = this.props;
     const aux = navigation.getParam('dados');
     const aux2 = navigation.getParam('nome');
-    console.log('dado da outra pagina' + aux.valor);
+    console.log('dado da outra pagina:' + aux2);
     let link = '/showUserByEmail/' + email;
     const usuario = await api.get(link, {
       headers: {
@@ -80,6 +84,7 @@ export default class Pagamento extends Component {
       avaliacao: usuario.data.avaliacao,
       idade: usuario.data.idade,
       bio: usuario.data.bio,
+      idUser:usuario.data.id,
       loading: false,
       item: aux,
       nomeLider: aux2,valorAux:aux.valor+'00'
@@ -88,6 +93,11 @@ export default class Pagamento extends Component {
   };
 
   onChangeText = (key, val) => {
+    let s = val.replace(/[/]+/g, '');
+ s = s.replace(/[,]+/g, '');
+ s = s.replace(/[.]+/g, '');
+ s = s.replace(/[R]+/g, '');
+ s = s.replace(/[$]+/g, '');
     this.setState({[key]: val});
   };
 
@@ -113,32 +123,42 @@ export default class Pagamento extends Component {
       //         console.log(this.state.month);
       //         console.log(this.state.year);
       //console.log(this.state.test);
+
+      const aux= `${this.state.data}`
+      console.log( aux.slice(-4))
+      let auxyear=aux.slice(-4)
+     // this.setState({year:  aux2});
+      //const valototal=preco.slice(0,2)+','+novo//Arrumar isso aqui
+      this.setState({month:aux.slice(0,2)});
+      let auxmonth= aux.slice(0,2)
+      console.log( aux.slice(0,2))
+
       console.log(this.state)
       const response = await apipagamento.post('/payment_token', {
-        account_id: "D1B7E5A209C34348BC26F22BA8653A96",
-        method: "credit_card",
-        test: "false",
-        data: {
-          number: "5234214169147364",
-          verification_value: "640",
-          first_name: "VINICIUS",
-          last_name: "C SILVA",
-          month: "06",
-          year: "2021",
-        },
-
-        // account_id: this.state.account_id,
-        // method: this.state.method,
-        // test: this.state.test,
+        // account_id: "D1B7E5A209C34348BC26F22BA8653A96",
+        // method: "credit_card",
+        // test: "false",
         // data: {
-        //   number: this.state.number,
-        //   verification_value: this.state.verification_value,
-        //   first_name: this.state.first_name,
-        //   last_name: this.state.last_name,
-        //   month: this.state.month,
-        //   year: this.state.year,
+        //   number: "asdf",
+        //   verification_value: "asdf",
+        //   first_name: "asdf",
+        //   last_name: "asdfC asdf",
+        //   month: "asdf",
+        //   year: "20asdf21",
         // },
-      });
+
+        account_id: this.state.account_id,
+        method: this.state.method,
+        test: this.state.test,
+        data: {
+          number: this.state.number,
+          verification_value: this.state.verification_value,
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          month:auxmonth,
+          year: auxyear,
+        },
+       });
       console.log("token:"+response.data.id);
       this.state.token = response.data.id;
       try {
@@ -186,14 +206,42 @@ export default class Pagamento extends Component {
               },
             ],
             payer: {
-              email: 'viniciuscarneirodasilva@gmail.com',
+              email: this.state.email,
               name: this.state.name,
             },
             json: true,
           },
         );
-          console.log("testepagamento")
-
+        
+       
+         
+          if(pagamento.data.success){
+            Alert.alert(
+              'Transação Aprovada!'
+            );
+            const link='/cadastraTurista/'+this.state.item.id
+            const token2 = await AsyncStorage.getItem('@turistando2:token')
+               const chamada= await api.post(link, {
+                  headers: {
+                    Authorization: `Bearer ${token2}`,
+                  },
+                  user_id:this.state.idUser,
+                  rota_id:this.state.item.id,
+    
+                });
+                console.log(chamada)
+                const teste = await api.get('/listaUsuario', {
+                  headers: {
+                    Authorization: `Bearer ${token2}`,
+                  },
+                });
+              console.log(teste)
+    
+          }else{            
+            Alert.alert(
+              'Transação negada!','Tente novamente'
+            );
+          }
 
       } catch (error) {
         this.setState({
@@ -271,7 +319,7 @@ export default class Pagamento extends Component {
                 autoCapitalize="none"
                 placeholderTextColor="rgb(87, 128, 178)"
                 value={this.state.number}
-                keyboardType={'phone-pad'}
+                keyboardType={'cc-number'}
                 maxLength={16}
                 onChangeText={val => this.onChangeText('number', val)}
               />
@@ -286,25 +334,17 @@ export default class Pagamento extends Component {
                 onChangeText={val => this.onChangeText('verification_value', val)}
 
               />
-              <TextInput
-                style={styles.input}
-                placeholder="Mês do vencimento do cartão de crédito"
-                autoCapitalize="none"
-                placeholderTextColor="rgb(87, 128, 178)"
-                value={this.state.month}
-                keyboardType={'number-pad'}
-                maxLength={2}
-                onChangeText={val => this.onChangeText('month', val)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Ano do vencimento do cartão de crédito ex:2024"
-                autoCapitalize="none"
-                placeholderTextColor="rgb(87, 128, 178)"
-                value={this.state.year}
-                keyboardType={'number-pad'}
-                maxLength={4}
-                onChangeText={val => this.onChangeText('year', val)}
+              <TextInputMask
+              style={styles.input}
+              placeholder="Data do vencimento do cartão de crédito"
+              placeholderTextColor="rgb(87, 128, 178)"
+                type={'datetime'}
+                options={{
+                  format: 'MM/YYYY',
+                }}
+                value={this.state.data}
+                onBlur={Keyboard.dismiss}
+                onChangeText={val => this.onChangeText('data', val)}
               />
               <Button
                 title="Pagar"

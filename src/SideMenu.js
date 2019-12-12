@@ -47,7 +47,7 @@ class SideMenu extends Component {
 			botaoVar =
 				<View>
 					<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Lider')}>
-						Lider de rota
+						Líder de rota
 					</Text>
 				</View>
 		}
