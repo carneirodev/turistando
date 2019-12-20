@@ -76,9 +76,9 @@ class MainScreen extends Component {
         data: response.data,
         loading: false,
       });
-      this.arrayholder = response;
+      this.arrayholder = [response.data];
 
-      //console.log("data pesquisa:")
+      console.log("data pesquisa:"+response.data)
       //data.log(response.data)
     } catch (response) {
       console.log('Erro:' + response);
@@ -100,13 +100,18 @@ class MainScreen extends Component {
     this.setState({
       value: text,
     });
-
-    const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.cidade.toUpperCase()} `;
-      const textData = text.toUpperCase();
-
-      return itemData.indexOf(textData) > -1;
-    });
+let cont =0
+let data= [ { id: 1, name: 'Mike', city: 'philps', state:'New York'}, { id: 2, name: 'Steve', city: 'Square', state: 'Chicago'}, { id: 3, name: 'Jhon', city: 'market', state: 'New York'}, { id: 4, name: 'philps', city: 'booket', state: 'Texas'}, { id: 5, name: 'smith', city: 'brookfield', state: 'Florida'}, { id: 6, name: 'Broom', city: 'old street', state: 'Florida'}, ]
+//console.log(this.arrayholder[0])
+let newData  = this.arrayholder[0].filter((item) => item.cidade.toUpperCase() == text.toUpperCase()).map((item) => (item));
+console.log(text);
+if(newData[0] == undefined  ){console.log("data1")  
+ newData  = this.arrayholder[0].filter((item) => item.personalidade.toUpperCase() == text.toUpperCase()).map((item) => (item));
+}
+if(newData[0] == undefined || text== '' ){console.log("data")
+  newData=this.arrayholder[0]
+}
+   
     this.setState({
       data: newData,
     });
@@ -226,7 +231,7 @@ class MainScreen extends Component {
                 </TouchableHighlight>
               )}
               ItemSeparatorComponent={this.renderSeparator}
-             // ListHeaderComponent={this.renderHeader}
+              ListHeaderComponent={this.renderHeader}
             />
           </View>
         </View>
