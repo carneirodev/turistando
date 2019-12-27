@@ -34,6 +34,7 @@ import HistoricoScreen from './HistoricoScreen';
 import CriarRotaScreen from './CriarRotaScreen';
 import EditarRotaScreen from './EditarRotaScreen';
 import EditarDados from './EditarDados';
+import Match from './MatchPersonalidade'
 import api from '../../api';
 // {"Id":1,"cidade":"Poços de caldas","titulo":"Igrejas Históricas","Saída":"11/11 - 14:00","Duração":"3 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
 // 			{"Id":2,"cidade":"Poços de caldas","titulo":"#Partiu Prias","Saída":"11/11 - 10:00","Duração":"5 Horas","Vaga":"2 Vagas","description":"Uma breve descrição"},
@@ -53,6 +54,7 @@ class MainScreen extends Component {
       selecionado: [],
       dialogVisible: false,
       quantidadeItem: 0,
+      user:[],
     };
     this.submit = this.submit.bind(this);
     this.arrayholder = [];
@@ -78,11 +80,26 @@ class MainScreen extends Component {
       });
       this.arrayholder = [response.data];
 
-      console.log("data pesquisa:"+response.data)
+      
       //data.log(response.data)
     } catch (response) {
       console.log('Erro:' + response);
     }
+
+
+    const token = await AsyncStorage.getItem('@turistando2:token');
+    const email = await AsyncStorage.getItem('@turistando2:userEmail');
+
+let link = '/showUserByEmail/' + email
+const usuario = await api.get(link, {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+    });
+this.setState({
+  user: usuario.data,
+  loading: false,
+});
   };
 
   renderSeparator = () => {
@@ -96,19 +113,38 @@ class MainScreen extends Component {
     );
   };
   //Ainda não funcional
+
+  searchFilterFunction2 = () => {
+         
+        
+    let text=this.state.user.personalidade
+    console.log("sera")
+    console.log(text);
+    if(text=="Aventureiro"){
+        text="Aventureira"
+    }
+    if(text=="Baladeira"){
+        text="Baladeiro"
+    }
+    const newData  = this.arrayholder[0].filter((item) => item.personalidade.toUpperCase() == text.toUpperCase()).map((item) => (item));
+   
+       
+        this.setState({
+          data: newData,
+        });
+      };
+
   searchFilterFunction = text => {
     this.setState({
       value: text,
     });
-let cont =0
-let data= [ { id: 1, name: 'Mike', city: 'philps', state:'New York'}, { id: 2, name: 'Steve', city: 'Square', state: 'Chicago'}, { id: 3, name: 'Jhon', city: 'market', state: 'New York'}, { id: 4, name: 'philps', city: 'booket', state: 'Texas'}, { id: 5, name: 'smith', city: 'brookfield', state: 'Florida'}, { id: 6, name: 'Broom', city: 'old street', state: 'Florida'}, ]
-//console.log(this.arrayholder[0])
+
 let newData  = this.arrayholder[0].filter((item) => item.cidade.toUpperCase() == text.toUpperCase()).map((item) => (item));
 console.log(text);
-if(newData[0] == undefined  ){console.log("data1")  
+if(newData[0] == undefined  ){
  newData  = this.arrayholder[0].filter((item) => item.personalidade.toUpperCase() == text.toUpperCase()).map((item) => (item));
 }
-if(newData[0] == undefined || text== '' ){console.log("data")
+if(newData[0] == undefined || text== '' ){
   newData=this.arrayholder[0]
 }
    
@@ -119,6 +155,7 @@ if(newData[0] == undefined || text== '' ){console.log("data")
 
   renderHeader = () => {
     return (
+      <View>
       <View style={styles.searchSection}>
         <TextInput
           placeholder="Pesquise uma cidade"
@@ -137,8 +174,15 @@ if(newData[0] == undefined || text== '' ){console.log("data")
             size={30}
             style={{alignItems: 'flex-end'}}
           />
-        </View>
+        </View></View>
+        <Button
+      buttonStyle={styles.botaoLogin}
+      onPress={this.searchFilterFunction2}
+      title={<Text style={{ color: 'white' }}>Clique para dar o match!</Text>}>
+  </Button>
+      
       </View>
+     
     );
   };
 
@@ -282,7 +326,7 @@ class Informacao extends Component {
       });
       this.arrayholder = response;
       console.log('info:');
-      //  console.log(response.data)
+       console.log(response.data)
     } catch (response) {
       console.log('Erro info:' + response);
     }
@@ -529,7 +573,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     fontSize: 18,
-  },
+  },botaoLogin: {
+    alignItems: 'center',
+    backgroundColor: "rgb(87, 128, 178)",
+    borderRadius: 20,
+    width: (Dimensions.get('window').width) * 8 / 10,
+    margin: 15
+},
   inputContainer: {
     paddingTop: 15,
     justifyContent: 'center',
@@ -622,6 +672,7 @@ const RootStack = createStackNavigator(
     EditarRotaScreen: EditarRotaScreen,
     EditarDados: EditarDados,
     Pagamento: Pagamento,
+    Match: Match
   },
   {
     initialRouteName: 'Home',

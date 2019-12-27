@@ -71,7 +71,11 @@ class SideMenu extends Component {
 							Rotas disponiveis
             			</Text>
 					</View>
-
+					<View>
+						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Match')}>
+						Match de personalidade
+            			</Text>
+					</View>
 
 					{/* <View>
 						<Text style={styles.sectionHeadingStyle} onPress={this.navigateToScreen('Historico')}>

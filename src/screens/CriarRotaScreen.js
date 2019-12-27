@@ -234,6 +234,7 @@ let s = val.replace(/[/]+/g, '');
                 onChangeText={val => this.onChangeText('personalidade', val)}
               />
             </View>
+            
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputLogin}
