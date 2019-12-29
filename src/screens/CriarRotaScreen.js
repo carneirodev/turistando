@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -8,10 +8,11 @@ import {
   TextInput,
   Keyboard,
   Alert,
+  Picker
 } from 'react-native';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import api from '../../api';
-import {TextInputMask} from 'react-native-masked-text';
+import { TextInputMask } from 'react-native-masked-text';
 
 export default class CriarRotaScreen extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class CriarRotaScreen extends Component {
       cidade: '',
       estado: '',
       qtdturistas: '',
-      personalidade: '',
+      personalidade: 'aventureira',
       descricao: '',
       saida: '',
       link: '',
@@ -42,16 +43,16 @@ export default class CriarRotaScreen extends Component {
   }
 
   onChangeText = (key, val) => {
-      
 
-let s = val.replace(/[/]+/g, '');
- s = s.replace(/[,]+/g, '');
- s = s.replace(/[.]+/g, '');
- s = s.replace(/[R]+/g, '');
- s = s.replace(/[$]+/g, '');
-    this.setState({[key]:s});console.log(val)
-   console.log(this.state.valor)
-   console.log(this.state.nome)
+
+    let s = val.replace(/[/]+/g, '');
+    s = s.replace(/[,]+/g, '');
+    s = s.replace(/[.]+/g, '');
+    s = s.replace(/[R]+/g, '');
+    s = s.replace(/[$]+/g, '');
+    this.setState({ [key]: s }); console.log(val)
+    console.log(this.state.valor)
+    console.log(this.state.nome)
     console.log(s)
   };
 
@@ -73,7 +74,7 @@ let s = val.replace(/[/]+/g, '');
     ) {
       this.state.loading = false;
       this.setState(
-        {error: 'Preencha todos os dados de cadastro para continuar!'},
+        { error: 'Preencha todos os dados de cadastro para continuar!' },
         () => false,
       );
       Alert.alert(
@@ -118,14 +119,14 @@ let s = val.replace(/[/]+/g, '');
   render() {
     if (this.state.loading) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text>Carregando</Text>
           <ActivityIndicator />
         </View>
       );
     }
     return (
-      <View style={{flex: 1, backgroundColor: '#FFF'}}>
+      <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <View
           style={{
             flex: 2,
@@ -154,9 +155,9 @@ let s = val.replace(/[/]+/g, '');
             </View>
             <View style={styles.inputContainer}>
               <TextInputMask
-              style={styles.inputLogin}
-              placeholder="Data"
-              placeholderTextColor="rgb(87, 128, 178)"
+                style={styles.inputLogin}
+                placeholder="Data"
+                placeholderTextColor="rgb(87, 128, 178)"
                 type={'datetime'}
                 options={{
                   format: 'DD/MM/YYYY',
@@ -224,17 +225,22 @@ let s = val.replace(/[/]+/g, '');
                 onChangeText={val => this.onChangeText('qtdturistas', val)}
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.inputLogin}
-                placeholder="Personalidade da rota"
-                placeholderTextColor="rgb(87, 128, 178)"
-                maxLength={20}
-                onBlur={Keyboard.dismiss}
-                onChangeText={val => this.onChangeText('personalidade', val)}
-              />
+            <View style={styles.containerPicker}>
+              <Text style={styles.textoAzul}>Personalidade da Rota</Text>
+              <Picker
+                selectedValue={this.state.personalidade}
+                style={styles.pickerEstilo}
+                pickerStyleType={styles.input}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ personalidade: itemValue })
+                }>
+                <Picker.Item label="Aventureiro!" value="aventureira" />
+                <Picker.Item label="Cultural!" value="cultural" />
+                <Picker.Item label="Baladeiro!" value="baladeira" />
+                <Picker.Item label="Tradicional!" value="tradicional" />
+                <Picker.Item label="Favela route!" value="favela" />
+              </Picker>
             </View>
-            
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputLogin}
@@ -290,7 +296,7 @@ let s = val.replace(/[/]+/g, '');
               buttonStyle={[styles.botaoLogin]}
               onPress={this.cadastrarRota}
               title={
-                <Text style={{color: 'white'}}>Cadastrar Rota</Text>
+                <Text style={{ color: 'white' }}>Cadastrar Rota</Text>
               }></Button>
           </ScrollView>
         </View>
@@ -335,5 +341,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: (Dimensions.get('window').width * 8) / 10,
     margin: 15,
+  },
+  containerPicker: {
+    marginVertical: 15,
+    width: (Dimensions.get('window').width) * 8 / 10,
+    padding: 10,
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderColor: "rgb(87, 128, 178)",
+    borderWidth: 2,
+  },
+  pickerEstilo: {
+    color: "rgb(87, 128, 178)",
+    width: (Dimensions.get('window').width) * 7 / 10,
+  },
+  textoAzul: {
+    color: "rgb(87, 128, 178)",
   },
 });

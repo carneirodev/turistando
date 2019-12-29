@@ -45,7 +45,7 @@ export default class SignInScreen extends React.Component {
             );
         }
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
 
                 <View style={styles.centralizar}>
                     <View style={styles.containerLogo}>
@@ -103,7 +103,7 @@ export default class SignInScreen extends React.Component {
                     </Button>
                 </View>
 
-            </ScrollView>
+            </View>
         );
     }
 
@@ -180,10 +180,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    backgroundContainer: {
-        flex: 4,
-    },
     centralizar: {
+        flex: 4,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -225,6 +223,7 @@ const styles = StyleSheet.create({
     },
     botaoVazio: {
         marginTop: 10,
+        marginBottom: 10,
         backgroundColor: "#FFF",
     }
 })
