@@ -14,6 +14,8 @@ import { Button, Icon } from "react-native-elements"
 import { ScrollView } from 'react-native-gesture-handler';
 import api from '../../api';
 
+let textInputCadastur = <View></View>
+
 export default class SignUp extends React.Component {
     static navigationOptions = {
         title: 'Cadastre-se'
@@ -84,6 +86,24 @@ export default class SignUp extends React.Component {
                 Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!(Seu email pode ja ter sido cadastrado)');
                 console.log(_err);
             }
+        }
+    }
+
+    campoGuia(tipo){
+        if (tipo == "guia") {
+            textInputCadastur =
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='CADASTUR'
+                        autoCapitalize="none"
+                        placeholderTextColor="rgb(87, 128, 178)"
+                        value={this.state.name}
+                        onChangeText={val => this.onChangeText('cadastur', val)}
+                    />
+                </View>
+        }else{
+            textInputCadastur = <View></View>
         }
     }
 
@@ -190,13 +210,17 @@ export default class SignUp extends React.Component {
                             selectedValue={this.state.tipo}
                             style={styles.pickerEstilo}
                             pickerStyleType={styles.input}
-                            onValueChange={(itemValue, itemIndex) =>
-                                this.setState({ tipo: itemValue })
-                            }>
-                            <Picker.Item label="Quero ser turista!" value="turista" />
-                            <Picker.Item label="Quero ser líder de Rota!" value="lider" />
+                            onValueChange={async (itemValue, itemIndex) =>
+                                this.setState({ tipo: itemValue }, this.campoGuia(itemValue)) 
+                            }>   
+                            <Picker.Item label="Quero ser turista!" value="turista"  />
+                            <Picker.Item label="Quero ser líder de Rota!" value="lider"  />
+                            <Picker.Item label="Quero ser guia de turismo!" value="guia"  />
                         </Picker>
                     </View>
+
+                    {textInputCadastur}
+
                     <View style={styles.containerPicker}>
                         <Text style={styles.texto}>VOCÊ VEIO POR ALGUMA POUSADA/HOSTEL PARCEIRO?
                         SE SIM, DIGITA O NOME DELA AQUI :)</Text>
