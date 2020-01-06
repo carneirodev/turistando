@@ -76,7 +76,7 @@ class MainScreen extends Component {
       this.setState({ loading: true });
 
       this.setState({
-        data: response.data,
+        data: response.data.reverse(),
         loading: false,
       });
       this.arrayholder = [response.data];
@@ -205,12 +205,11 @@ class MainScreen extends Component {
     //console.log("data" + this.data)
     return (
       <ImageBackground
-        source={{
-          uri:
-            'https://static3.tcdn.com.br/img/img_prod/580806/papel_de_parede_calcadao_de_copacabana_2067_2_20190521103442.jpg',
-        }}
+        source={
+          require('../img/fundo.jpg')
+        }
         style={{ width: '100%', height: '100%' }}>
-        <View style={{ flex: 1, backgroundColor: '#e6e6e699', marginTop: 15 }}>
+        <View style={{ flex: 1, marginTop: 15 }}>
           <View
             style={{ flex: 10, justifyContent: 'center', alignItems: 'center' }}>
             <FlatList
@@ -268,7 +267,7 @@ class MainScreen extends Component {
 
                       <View style={styles.containerTexto}>
                         <Text style={styles.texto}>
-                          Duração: {item.duracao} Horas
+                          Duração: {item.duracao} Hr
                         </Text>
                       </View>
                     </View>
