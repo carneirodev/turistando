@@ -24,7 +24,7 @@ export default class EditarDados extends Component {
 
         this.state = {
             loading: true,
-            user: [],
+            user: [],text:"CASO TENHA ESCOLHIDO LÍDER DE ROTA, QUAIS DIAS (E HORA)   NA SEMANA VOCÊ TEM PARA APRESENTAR SUA CIDADE?(ISSO PODE SER MODIFICADO QUANTAS  VEZES QUISER)",
             error: null,
             dialogVisible: false,
             name: '', lastName: '', email: '', telefone: '', bairro: '', cidade: '', bio: '',
@@ -238,7 +238,7 @@ export default class EditarDados extends Component {
                             </View>
                             <View style={styles.containerPicker}>
                                 <Text style={styles.texto}>VOCÊ VEIO POR ALGUMA POUSADA/HOSTEL PARCEIRO?
-                        SE SIM, DIGITA O NOME DELA AQUI :)</Text>
+                        SE SIM, DIGITA O NOME DELA AQUI</Text>
                                 <TextInput
                                     style={styles.inputMenor}
                                     placeholder='POUSADA/HOSTEL'
@@ -249,9 +249,7 @@ export default class EditarDados extends Component {
                                 />
                             </View>
                             <View style={styles.containerPicker}>
-                                <Text style={styles.texto}>CASO TENHA ESCOLHIDO LÍDER DE ROTA, QUAIS DIAS (E HORA)
-                                NA SEMANA VOCÊ TEM PARA APRESENTAR SUA CIDADE?(ISSO PODE SER MODIFICADO QUANTAS
-                        VEZES QUISER)</Text>
+    <Text style={styles.texto}>{this.state.text}</Text>
                                 <TextInput
                                     style={styles.inputMenor}
                                     placeholder='Dias disponíveis'
