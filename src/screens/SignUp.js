@@ -223,7 +223,7 @@ export default class SignUp extends React.Component {
 
                     <View style={styles.containerPicker}>
                         <Text style={styles.texto}>VOCÊ VEIO POR ALGUMA POUSADA/HOSTEL PARCEIRO?
-                        SE SIM, DIGITA O NOME DELA AQUI :)</Text>
+                        SE SIM, DIGITA O NOME DELA AQUI</Text>
                         <TextInput
                             style={styles.inputMenor}
                             placeholder='POUSADA/HOSTEL'
