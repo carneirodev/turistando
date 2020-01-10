@@ -112,9 +112,9 @@ export default class SignInScreen extends React.Component {
         await AsyncStorage.setItem('userToken', 'abc');
         this.props.navigation.navigate('App');
         */
-        this.state.loading = true;
+        this.setState({ loading: true });
         if (this.state.email.length === 0 || this.state.password.length === 0) {
-            this.state.loading = false;
+            this.setState({ loading: false });
             this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
             Alert.alert('Erro', 'Preencha usuário e senha para continuar!');
         } else {
@@ -146,10 +146,10 @@ export default class SignInScreen extends React.Component {
                     ],
                 });
                 this.props.navigation.dispatch(resetAction);*/
-                this.state.loading = false;
+                this.setState({ loading: false });
                 this.props.navigation.navigate('App');
             } catch (_err) {
-                this.state.loading = false;
+                this.setState({ loading: false });
                 this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema com o login, verifique suas credenciais!');
                 console.log(_err);
