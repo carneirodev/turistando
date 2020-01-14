@@ -14,6 +14,9 @@ import { Button } from 'react-native-elements';
 import api from '../../api';
 import { TextInputMask } from 'react-native-masked-text';
 
+let textInputValor = <View></View>
+let tipo = ""
+
 export default class CriarRotaScreen extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +40,7 @@ export default class CriarRotaScreen extends Component {
       descricao: '',
       saida: '',
       link: '',
-      valor: '',
+      valor: '0',
       avaliacao: '0',
     };
   }
@@ -57,7 +60,7 @@ export default class CriarRotaScreen extends Component {
   };
 
   cadastrarRota = async () => {
-    this.state.loading = true;
+    this.setState({ loading: true })
     if (
       this.state.nome.length === 0 ||
       this.state.data.length === 0 ||
@@ -72,7 +75,7 @@ export default class CriarRotaScreen extends Component {
       this.state.link.length === 0 ||
       this.state.valor.length === 0
     ) {
-      this.state.loading = false;
+      this.setState({ loading: false })
       this.setState(
         { error: 'Preencha todos os dados de cadastro para continuar!' },
         () => false,
@@ -82,6 +85,9 @@ export default class CriarRotaScreen extends Component {
         'Preencha todos os dados de cadastro para continuar!',
       );
     } else {
+      if(this.state.valor == 0){
+        this.state.valor = this.state.duracao * 30
+      }
       try {
         await api.post('/rotas', {
           nome: this.state.nome,
@@ -99,10 +105,10 @@ export default class CriarRotaScreen extends Component {
           valor: this.state.valor,
         });
 
-        this.state.loading = false;
+        this.setState({ loading: false })
         this.props.navigation.goBack();
       } catch (_err) {
-        this.state.loading = false;
+        this.setState({ loading: false })
         this.setState({
           error:
             'Houve um problema ao cadastrar, verifique se todos campos foram preenchidos!',
@@ -116,7 +122,28 @@ export default class CriarRotaScreen extends Component {
     }
   };
 
+  componentDidMount = async () => {
+    tipo = await AsyncStorage.getItem('@turistando2:userTipo');
+  }
+
   render() {
+
+    if (tipo === "guia" || tipo === "Guia") {
+      textInputValor =
+        <View style={styles.inputContainer}>
+          <TextInputMask
+            type={'money'}
+            style={styles.inputLogin}
+            placeholder="Valor da rota"
+            placeholderTextColor="rgb(87, 128, 178)"
+            keyboardType={'number-pad'}
+            value={this.state.valor}
+            onBlur={Keyboard.dismiss}
+            onChangeText={val => this.onChangeText('valor', val)}
+          />
+        </View>
+    }
+
     if (this.state.loading) {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -125,6 +152,7 @@ export default class CriarRotaScreen extends Component {
         </View>
       );
     }
+
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <View
@@ -179,6 +207,7 @@ export default class CriarRotaScreen extends Component {
               <TextInput
                 style={styles.inputLogin}
                 placeholder="Hora"
+                keyboardType={"number-pad"}
                 placeholderTextColor="rgb(87, 128, 178)"
                 maxLength={20}
                 onBlur={Keyboard.dismiss}
@@ -188,7 +217,8 @@ export default class CriarRotaScreen extends Component {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputLogin}
-                placeholder="Duração"
+                keyboardType={"number-pad"}
+                placeholder="Duração em horas (30R$/h para líderes)"
                 placeholderTextColor="rgb(87, 128, 178)"
                 maxLength={10}
                 onBlur={Keyboard.dismiss}
@@ -219,6 +249,7 @@ export default class CriarRotaScreen extends Component {
               <TextInput
                 style={styles.inputLogin}
                 placeholder="Quantidade de pessoas envolvidas (turistas)"
+                keyboardType={"number-pad"}
                 placeholderTextColor="rgb(87, 128, 178)"
                 maxLength={5}
                 onBlur={Keyboard.dismiss}
@@ -271,18 +302,10 @@ export default class CriarRotaScreen extends Component {
                 onChangeText={val => this.onChangeText('link', val)}
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInputMask
-                type={'money'}
-                style={styles.inputLogin}
-                placeholder="Valor da rota"
-                placeholderTextColor="rgb(87, 128, 178)"
-                keyboardType={'number-pad'}
-                value={this.state.valor}
-                onBlur={Keyboard.dismiss}
-                onChangeText={val => this.onChangeText('valor', val)}
-              />
-              {/* <TextInput
+
+            {textInputValor}
+
+            {/* <TextInput
                 style={styles.inputLogin}
                 placeholder="Valor da rota"
                 placeholderTextColor="rgb(87, 128, 178)"
@@ -291,7 +314,7 @@ export default class CriarRotaScreen extends Component {
                 onBlur={Keyboard.dismiss}
                 onChangeText={val => this.onChangeText('valor', val)}
               /> */}
-            </View>
+
             <Button
               buttonStyle={[styles.botaoLogin]}
               onPress={this.cadastrarRota}
