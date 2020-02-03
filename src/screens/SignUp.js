@@ -8,13 +8,26 @@ import {
     Picker,
     Text,
     Alert,
+    Image,
     ActivityIndicator
 } from 'react-native'
+import ImagePicker from 'react-native-image-picker';
 import { Button, Icon } from "react-native-elements"
 import { ScrollView } from 'react-native-gesture-handler';
 import api from '../../api';
 
 let textInputCadastur = <View></View>
+
+// More info on all the options is below in the API Reference... just some common use cases shown here
+const options = {
+    title: 'Selecione foto de perfil',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
+
 
 export default class SignUp extends React.Component {
     static navigationOptions = {
@@ -25,7 +38,8 @@ export default class SignUp extends React.Component {
         loading: false,
         name: '', lastName: '', email: '', password: '', telefone: '', bairro: '', cidade: '',
         personalidade: 'aventureiro', tipo: 'turista', hotel: '', disp: '', avaliacao: '', idade: '',
-        bio: 'Adicione uma bio para que possam te conhecer melhor! Basta clicar em Editar Perfil!'
+        bio: 'Adicione uma bio para que possam te conhecer melhor! Basta clicar em Editar Perfil!',
+        avatarSource: null
     }
 
     onChangeText = (key, val) => {
@@ -33,12 +47,12 @@ export default class SignUp extends React.Component {
     }
 
     signUp = async () => {
-        this.state.loading = true;
+        this.setState({ loading: true });
         if (this.state.email.length === 0 || this.state.password.length === 0
             || this.state.name.length === 0 || this.state.lastName.length === 0
             || this.state.telefone.length === 0 || this.state.bairro.length === 0
             || this.state.cidade.length === 0 || this.state.idade.length === 0) {
-            this.state.loading = false;
+            this.setState({ loading: false });
             this.setState({ error: 'Preencha todos os dados de cadastro para continuar!' }, () => false);
             Alert.alert('Erro', 'Preencha todos os dados de cadastro para continuar!');
         } else {
@@ -78,10 +92,10 @@ export default class SignUp extends React.Component {
                 ['@turistando2:userEmail', this.state.email],
                 ['@turistando2:userTipo', tipo]])
 
-                this.state.loading = false;
+                this.setState({ loading: false });
                 this.props.navigation.navigate('App');
             } catch (_err) {
-                this.state.loading = false;
+                this.setState({ loading: false });
                 this.setState({ error: 'Houve um problema ao cadastrar, verifique suas credenciais!' });
                 Alert.alert('Erro', 'Houve um problema ao cadastrar, verifique suas credenciais!(Seu email pode ja ter sido cadastrado)');
                 console.log(_err);
@@ -89,7 +103,7 @@ export default class SignUp extends React.Component {
         }
     }
 
-    campoGuia(tipo){
+    campoGuia(tipo) {
         if (tipo == "guia") {
             textInputCadastur =
                 <View>
@@ -102,9 +116,33 @@ export default class SignUp extends React.Component {
                         onChangeText={val => this.onChangeText('cadastur', val)}
                     />
                 </View>
-        }else{
+        } else {
             textInputCadastur = <View></View>
         }
+    }
+
+    carregarImagem = () => {
+
+        ImagePicker.launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+                Alert.alert('Erro', 'Erro ao abrir galeria!');
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                this.setState({ avatarSource: source });
+            }
+        });
+
     }
 
     render() {
@@ -211,11 +249,11 @@ export default class SignUp extends React.Component {
                             style={styles.pickerEstilo}
                             pickerStyleType={styles.input}
                             onValueChange={async (itemValue, itemIndex) =>
-                                this.setState({ tipo: itemValue }, this.campoGuia(itemValue)) 
-                            }>   
-                            <Picker.Item label="Quero ser turista!" value="turista"  />
-                            <Picker.Item label="Quero ser líder de Rota!" value="lider"  />
-                            <Picker.Item label="Quero ser guia de turismo!" value="guia"  />
+                                this.setState({ tipo: itemValue }, this.campoGuia(itemValue))
+                            }>
+                            <Picker.Item label="Quero ser turista!" value="turista" />
+                            <Picker.Item label="Quero ser líder de Rota!" value="lider" />
+                            <Picker.Item label="Quero ser guia de turismo!" value="guia" />
                         </Picker>
                     </View>
 
@@ -246,6 +284,16 @@ export default class SignUp extends React.Component {
                             onChangeText={val => this.onChangeText('disp', val)}
                         />
                     </View>
+
+                    <Button
+                        title='Selecionar Avatar'
+                        onPress={this.carregarImagem}
+                        buttonStyle={styles.botaoImage}
+                    />
+                    <View style={styles.container}>
+                        <Image source={this.state.avatarSource} style={styles.uploadAvatar} />
+                    </View>
+
                     <Button
                         title='Cadastrar'
                         onPress={this.signUp}
@@ -306,4 +354,15 @@ const styles = StyleSheet.create({
         width: (Dimensions.get('window').width) * 8 / 10,
         margin: 15
     },
+    botaoImage: {
+        alignItems: 'center',
+        backgroundColor: "rgb(87, 128, 178)",
+        width: (Dimensions.get('window').width) * 8 / 10,
+    },
+    uploadAvatar: {
+        width: (Dimensions.get('window').width) * 8 / 10,
+        height: (Dimensions.get('window').height) * 5 / 10,
+        borderColor: "rgb(87, 128, 178)",
+        borderWidth: 2,
+    }
 })
